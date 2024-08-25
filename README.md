@@ -1,2 +1,2 @@
-# spotlight.js
+# Spotlight.js
 Spotlight JS

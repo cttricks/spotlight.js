@@ -1,0 +1,183 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    background-color: #fed430;
+    background-image: url('../img/shapes-dark.png');
+    background-blend-mode: overlay;
+}
+
+a{
+    color: #000;
+    text-decoration: underline;
+}
+
+.site-info{
+    height: 100%;
+    display: grid;
+    justify-content: start;
+    align-items: center;
+    padding: 5rem 0;
+}
+
+.site-info h1 {
+    font-weight: 700;
+    font-size: 3rem;
+}
+
+.site-info p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-top: 24px;
+}
+
+.site-icon{
+    transform: rotateY(180deg);
+    width: 250px;
+}
+
+.site-info button{
+    font-size: 16px;
+    border: 3px solid #000;
+    padding: 12px 20px;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 20px 0 0 0;
+}
+
+.site-info button:first-child{
+    background: transparent;
+    color: #000;
+}
+
+.site-info button:last-child{
+    background: #000;
+    color: #ffe09a;
+    margin-left: 8px;
+}
+
+.site-info button:hover{
+    opacity: .8;
+}
+
+.hl-section{
+    padding: 3.5rem 0;
+    display: flex;
+    flex-flow: wrap;
+}
+
+.hl-section span,
+.exmaples button{
+    border: 1px solid #000000;
+    margin: 6px 4px;
+    padding: 4px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+    background: transparent;
+    color: #000;
+}
+
+.hl-section span:hover,
+.exmaples button:hover {
+    border-color: #fdba20;
+    background: #fdba20;
+}
+
+.about-lib div.icon{
+    width: 48px;
+    height: 48px;
+    background: #fdba20;
+    padding: 8px;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.about-lib h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 20px 0;
+}
+
+.about-lib p{
+    font-size: 16px;
+    text-align: justify;
+}
+
+.exmaples{
+    display: flex;
+    flex-flow: wrap;
+}
+
+.hr-line{
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    width: 100%;
+    height: 2px;
+    background: #000;
+}
+
+.github-starts {
+    display: grid;
+    justify-content: center;
+}
+
+.github-starts div.text-center{
+    max-width: 960px;
+}
+
+.github-starts button{
+    font-size: 18px;
+    border: 3px solid;
+    padding: 12px 20px;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 20px 0 0 0;
+}
+
+.github-starts button svg{
+    position: relative;
+    top: -3px;
+}
+
+.github-starts button:first-child{
+    border-color: #fdba20;
+    background: #fdba20;
+}
+.github-starts button:last-child{
+    border-color: #000;
+    background: #000;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.github-starts button:hover{
+    opacity: .8;
+}
+
+footer{
+    display: grid;
+    justify-content: center;
+    background: #000;
+}
+
+footer span,
+footer a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 0 8px;
+}
+
+footer a svg{
+    position: relative;
+    top: -2px;
+    margin-left: 2px;
+}
