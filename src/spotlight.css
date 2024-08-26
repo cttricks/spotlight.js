@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.sl-model {
+    position: absolute;
+    padding: 15px;
+    min-width: 250px;
+    max-width: 300px;
+    border-radius: 4px;
+    z-index: 9999;
+    font-family: "Poppins", sans-serif;
+    cursor: default;
+    box-shadow: 4px 10px 20px #666;
+    background: #fcfcfc;
+    color: #2d2d2d;
+}
+
+.sl-model:before {
+    content: '';
+    height: 16px;
+    width: 16px;
+    background: #fff;
+    position: absolute;
+    top: -6px;
+    left: 8px;
+    border-radius: 4px;
+    z-index: 0;
+    transform: rotate(45deg);
+}
+
+.sl-title {
+    font-size: 20px;
+    font-weight: 600;
+    display: block;
+    position: relative;
+    line-height: 1.5;
+    zoom: 1;
+}
+
+.sl-description {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+    zoom: 1;
+}
+
+.sl-control-panel {
+    width: 100%;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto 65px;
+    gap: 8px;
+}
+
+.sl-footer {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: auto 70px 50px;
+    gap: 5px;
+}
+
+.sl-spot {
+    margin: auto 0;
+    font-size: 13px;
+    font-weight: 400;
+    zoom: 1;
+    opacity: .7;
+}
+
+.sl-button {
+    border: 1px solid;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 3px 0;
+    border-radius: 4px;
+    color: inherit;
+    opacity: .8;
+    cursor: pointer;
+    background-color: inherit;
+    border-color: #ccc;
+}
+
+.sl-button:hover {
+    opacity: 1;
+}
+
+.sl-button.hidden {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+}
+
+.sl-button.done {
+    background-color: #2196F3;
+    color: #fff;
+    border-color: #2196F3;
+}

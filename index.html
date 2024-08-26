@@ -117,10 +117,10 @@
             <button data-style="highlight-only">Highlight Only</button>
             <button data-style="confirm-before-exit">Confirm on Exit</button>
             <button data-style="change-overlay-color">Overlay Color</button>
-            <!-- Spotlight; ./custom-popup.webp; Design and integrate custom models with options to customize and use pictures, GIFs, and more in your explanations. -->
-            <button data-style="custom-model">Custom Model</button>
+            <!-- Spotlight; ./docs/assets/img/demo-tour/custom-popup.webp; Use pictures, GIFs, and more in your explanations. -->
+            <button data-style="popover-with-img">Popover with Image</button>
             <!-- Spotlight; Spotlight JS includes an <strong>onEvent</strong> callback that captures and emits all events from start to finish. -->
-            <button data-style="about-event-handling">Event Handling</button>
+            <button data-style="event-listener">Event Listener</button>
         </div>
         <p class="mt-4">
             Additional features are planned for future updates. If you have any suggestions, feel free to
@@ -129,6 +129,7 @@
     </section>
 
     <div class="hr-line"></div>
+    
     <section class="container-lg github-starts">
         <div class="text-center">
             <h2>Unlock the full potential of your web projects</h2>
@@ -151,6 +152,7 @@
             </div>
         </div>
     </section>
+
     <footer class="py-4 mt-4">
         <div>
             <span>MIT Licensed © </span>
@@ -180,9 +182,19 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <!-- <script type="module" src="./dist/spotlight.js" ></script> -->
 
     <script type="module">
-        // Let's import spotlight.js
+        
+        // Let's Start with
+        import { spotlight } from './dist/spotlight.min.js';
+
+        const Spotlight = await spotlight();
+
+        // Event Handler
+        Spotlight.addEventListener('exit', (e) => {
+            Spotlight.setCover({ hex: '#000000', alpha: 0.5});
+        });
 
         // Below codes are to handel the events of this page Only
         document.querySelector('footer span').innerHTML += new Date().getFullYear();
@@ -193,7 +205,38 @@
 
         document.body.addEventListener('click', (e) => {
             if((e.target.getAttribute('type')??'') === 'link') return handelButtonClickWithLinkAttr(e.target);
-            console.log(e.target);
+            
+            let toggle = e.target.getAttribute('data-style');
+
+            if(!toggle) return;
+            e.preventDefault(); 
+
+            switch(toggle){
+                case 'highlight-only':
+                    Spotlight.start({ from: 3, highlightOnly: true });
+                    break;
+
+                case 'confirm-before-exit':
+                    Spotlight.start({ from: 3, highlightOnly: true, confirmOnExit: true });
+                    break;
+                    
+                case 'change-overlay-color':
+                    Spotlight.setCover({ hex: '#bfff5c', alpha: 0.5});
+                    Spotlight.start({ from: 3, highlightOnly: true });
+                    break;
+
+                case 'popover-with-img':
+                    Spotlight.start({ from: 4});
+                    break;
+
+                case 'event-listener':
+                    Spotlight.start({ from: 5 });
+                    break;
+
+                default:
+                    console.log(`${toggle} is not a toggle event`);
+            }
+            
         });
 
     </script>
