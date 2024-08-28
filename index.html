@@ -4,12 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-   
+
+    <!-- Primary Meta Tags -->
     <title>Spotlight.js</title>
+    <meta name="title" content="Spotlight.js">
+    <meta name="description"
+        content="Interactive walkthroughs, key feature spotlights, in-app guidance, & additional resources to support users in navigating & understanding the product.">
+    <meta name="keywords"
+        content="spotlight, popover, overlay, tour, walkthrough, product-tour, features-introduction, javascript-library">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="15 days">
+    <meta name="author" content="Tanish Raj">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cttricks.com/" />
+    <meta property="og:title" content="Spotlight.js" />
+    <meta property="og:description"
+        content="Interactive walkthroughs, key feature spotlights, in-app guidance, & additional resources to support users in navigating & understanding the product." />
+    <meta property="og:image" content="./docs/assets/img/spotlight-js-banner.png" />
+
     <link rel="icon" href="./docs/assets/img/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./docs/assets/css/home.css">
-    <!-- TODO: Add Meta tags -->
+
+
 </head>
 
 <body>
@@ -124,12 +145,13 @@
         </div>
         <p class="mt-4">
             Additional features are planned for future updates. If you have any suggestions, feel free to
-            <a href="https://github.com/cttricks/spotlight.js/discussions" target="_blank">start a discussion</a> on our GitHub repository.
+            <a href="https://github.com/cttricks/spotlight.js/discussions" target="_blank">start a discussion</a> on our
+            GitHub repository.
         </p>
     </section>
 
     <div class="hr-line"></div>
-    
+
     <section class="container-lg github-starts">
         <div class="text-center">
             <h2>Unlock the full potential of your web projects</h2>
@@ -182,10 +204,9 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <!-- <script type="module" src="./dist/spotlight.js" ></script> -->
 
     <script type="module">
-        
+
         // Let's Start with
         import { spotlight } from './dist/spotlight.min.js';
 
@@ -193,25 +214,25 @@
 
         // Event Handler
         Spotlight.addEventListener('exit', (e) => {
-            Spotlight.setCover({ hex: '#000000', alpha: 0.5});
+            Spotlight.setCover({ hex: '#000000', alpha: 0.5 });
         });
 
         // Below codes are to handel the events of this page Only
         document.querySelector('footer span').innerHTML += new Date().getFullYear();
 
         const handelButtonClickWithLinkAttr = (e) => {
-            window.open((e.getAttribute('link')??'#'), (e.getAttribute('target')??'_self'));
+            window.open((e.getAttribute('link') ?? '#'), (e.getAttribute('target') ?? '_self'));
         };
 
         document.body.addEventListener('click', (e) => {
-            if((e.target.getAttribute('type')??'') === 'link') return handelButtonClickWithLinkAttr(e.target);
-            
+            if ((e.target.getAttribute('type') ?? '') === 'link') return handelButtonClickWithLinkAttr(e.target);
+
             let toggle = e.target.getAttribute('data-style');
 
-            if(!toggle) return;
-            e.preventDefault(); 
+            if (!toggle) return;
+            e.preventDefault();
 
-            switch(toggle){
+            switch (toggle) {
                 case 'highlight-only':
                     Spotlight.start({ from: 3, highlightOnly: true });
                     break;
@@ -219,14 +240,14 @@
                 case 'confirm-before-exit':
                     Spotlight.start({ from: 3, highlightOnly: true, confirmOnExit: true });
                     break;
-                    
+
                 case 'change-overlay-color':
-                    Spotlight.setCover({ hex: '#bfff5c', alpha: 0.5});
+                    Spotlight.setCover({ hex: '#bfff5c', alpha: 0.5 });
                     Spotlight.start({ from: 3, highlightOnly: true });
                     break;
 
                 case 'popover-with-img':
-                    Spotlight.start({ from: 4});
+                    Spotlight.start({ from: 4 });
                     break;
 
                 case 'event-listener':
@@ -236,7 +257,7 @@
                 default:
                     console.log(`${toggle} is not a toggle event`);
             }
-            
+
         });
 
     </script>
