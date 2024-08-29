@@ -3,15 +3,6 @@
 <img src="https://raw.githubusercontent.com/cttricks/spotlight.js/master/docs/assets/img/spotlight-js-banner.png" alt="Spotlight.js" />
 </a>
 </div>
-
-&nbsp;
-
-<img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white"/>
-<img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E"/>
-<img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white" />
-<img src="https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white"/>
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
-
 &nbsp;
 
 A robust, efficient, and fully adaptable pure JavaScript engine designed to direct user attention across your webpage. Free of external libraries, it ensures compatibility with all major browsers and provides a wide range of customization possibilities.
