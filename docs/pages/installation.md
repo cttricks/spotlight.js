@@ -1,2 +1,5 @@
+Last Updated On _30th August 2024_
+
 #Installation
-You can use CDN and include the script in your HTML file
+
+Details coming soon. Stay tuned!

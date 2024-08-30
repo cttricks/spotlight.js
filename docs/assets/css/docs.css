@@ -4,6 +4,138 @@
     box-sizing: border-box;
 }
 
+:root{
+    --external-link-color: #999;
+    --external-link-icon: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath d='M0 0h24v24H0V0z' fill='none' /%3E%3Cpath d='M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5H9z' /%3E%3C/svg%3E");
+}
+
 body{
     background: #f5f5f5;
+    height: 100vh;
+}
+
+.external-link:after {
+    content: "";
+    display: inline-block;
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    margin-top: -1px;
+    margin-left: 4px;
+    background: var(--external-link-color);
+    -webkit-mask-image: var(--external-link-icon);
+    mask-image: var(--external-link-icon)
+}
+
+.icon-link{
+    position: relative;
+    top: 2px;
+}
+
+.main__body{
+    height: 100vh;
+    padding-top: 60px;
+}
+
+aside{
+    height: calc(100vh - 60px);
+    padding: 40px 20px;
+}
+
+aside li a{
+    position: relative;
+    font-size: 1.1rem !important;
+}
+
+aside li a::before{
+    content: "";
+    width: 4px;
+    height: 30px;
+    background: transparent;
+    position: absolute;
+    left: -16px;
+    top: 5px;
+}
+
+aside li a.active::before{
+    background: #fdba20;
+}
+
+article{
+    height: calc(100vh - 80px);
+    padding: 40px 0px;
+    margin-top: 10px;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;  
+}
+
+article::-webkit-scrollbar {
+    display: none;
+}
+
+/*Markdown*/
+article h1, 
+article h2, 
+article h3, 
+article h4, 
+article h5, 
+article h6 {
+    background: transparent;
+    font-weight: 600;
+    margin-top: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+article h1, 
+article h2{
+    border-bottom: 1px solid gray;
+    padding-bottom: .3em;
+}
+
+article blockquote {
+    background: #E6F2E6;
+    border-left: 3px solid #408040;
+    font-style: italic;
+    padding-left: 8px;
+    margin-left: 2px;
+}
+
+article pre {
+    background: #E0F0FF;
+    border-left: 5px solid #55AAFF;
+    padding: 16px 12px;
+    margin-left: 2px;
+}
+
+article code {
+    background: #E0F0FF;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+article table {
+    border-spacing: 0px;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+article th, article td {
+    border-left: 1px solid gray;
+    border-top: 1px solid gray;
+}
+
+article th {
+    background: #D4D4D4;
+    font-weight: 600;
+}
+
+article ul {
+    margin-inline-start: 20px;
+    margin-inline-end: 20px;
+}
+
+article ol {
+    margin-inline-start: 25px;
+    margin-inline-end: 25px;
 }
