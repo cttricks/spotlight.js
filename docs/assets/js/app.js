@@ -1,6 +1,7 @@
 const Pages = [
     "installation",
-    "quick-start-guide"
+    "quick-start-guide",
+    "api-reference"
 ];
 
 /*
@@ -11,6 +12,8 @@ const Pages = [
 *
 */
 var converter = new showdown.Converter();
+const contributionContainer = document.querySelector('div.contribution');
+const paginationContainer = document.querySelector('div.pagination');
 
 // Controller
 document.addEventListener('DOMContentLoaded', async () => {
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function getTitleFromPath(path){
     path = path.split('-').join(' ');
+    path = path.split('api').join('API');
     return `${path.substring(0,1).toUpperCase()}${path.substring(1)}`;
 }
 
@@ -57,18 +61,30 @@ async function loadPage(path){
     if(path !== '404') history.replaceState(null, '', `#${path}`);
 
     // Set page title
-    document.title = `${await getTitleFromPath(path)} - Spotlight.js`;;
+    document.title = `${await getTitleFromPath(path)} - Spotlight.js`;
+    contributionContainer.style.display = 'none';
+    paginationContainer.parentElement.style.display = 'none';
 
     // Get Content
     let content = await getPageContent(path);
     if(content === 'NOT_FOUND') content = await getPageContent('404');
-    document.querySelector('article').innerHTML = converter.makeHtml(content);
+    document.querySelector('main').innerHTML = converter.makeHtml(content);
+    document.getElementById('currentState').innerHTML = (path === '404') ? 'Oops! Article Not Found' : `<span class="badge-path">docs&nbsp;&nbsp;&bull;&nbsp;&nbsp;pages&nbsp;&nbsp;&bull;&nbsp;&nbsp;${path}</span>`;
 
     // Set active sidebar item
     await setActiveClass(path);
 
+    // Stop here if it's a non existing route
+    if(path === '404') return;
+
     // Format the codes elements
     formatCodeElements();
+
+    // Set Footer
+    setFooter(path);
+
+    // Set Pagination
+    pagination(path);
     
 }
 
@@ -92,7 +108,7 @@ async function getPageContent(path) {
 }
 
 async function pageNotFound(path){
-    document.querySelector('article').innerHTML = 'Page Not Found!';
+    document.querySelector('main').innerHTML = 'Page Not Found!';
 }
 
 async function composeSideBar() {
@@ -133,7 +149,7 @@ async function setActiveClass(path){
 
 async function formatCodeElements() {
     // Get all <code> elements
-    const codeElements = document.querySelectorAll('article code');
+    const codeElements = document.querySelectorAll('main code');
 
     codeElements.forEach((codeElement) => {
         // Get the language class (like language-html)
@@ -154,4 +170,42 @@ async function formatCodeElements() {
             }
         }
     });
+}
+
+async function setFooter(path) {
+
+    fetch(`https://api.github.com/repos/cttricks/spotlight.js/commits?path=docs/pages/${path}.md`, {
+        headers: {
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    }).then(commits => {
+        if (commits.length > 0) {
+            const lastCommit = commits[0];
+
+            let [date, contributor] = contributionContainer.querySelectorAll('div.text-end div');
+            date.innerHTML = new Date(lastCommit.commit.author.date).toLocaleString();
+            contributor.innerHTML = lastCommit.commit.committer.name;
+            contributionContainer.querySelector('a').href = `https://github.com/cttricks/spotlight.js/blob/master/docs/pages/${path}.md`;
+            contributionContainer.style.display = 'block';
+        }
+    }).catch(error => {
+        console.error('Error fetching data. Please check the console for details.', error);
+    });
+}
+
+async function pagination(path){
+    
+    let itemIndex = Pages.indexOf(path);
+    let items = paginationContainer.querySelectorAll('div.col');
+
+    items[0].innerHTML = (itemIndex < 1) ? '' : `<div class="fs-7"><span class="arrow left"></span>Previous</div><a class="fw-semibold lh-lg nav-link" href="${Pages[(itemIndex -1)]}" type="link" >${await getTitleFromPath(Pages[(itemIndex -1)])}</a>`;
+
+    items[1].innerHTML = ((itemIndex +1) >= Pages.length) ? '' : `<div class="fs-7">Next<span class="arrow right"></span></div><a class="fw-semibold lh-lg nav-link" href="${Pages[(itemIndex +1)]}" type="link" >${await getTitleFromPath(Pages[(itemIndex +1)])}</a>`;
+
+    paginationContainer.parentElement.style.display = 'block';
 }

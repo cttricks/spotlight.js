@@ -1,5 +1,3 @@
-Last Updated On _30th August 2024_
-
 # Quick Start Guide
 
 To quickly get started with Spotlight.js, follow these simple steps to create a basic integration without writing any additional JavaScript code. This example demonstrates how easily you can begin using the library, but keep in mind that Spotlight.js offers a wide range of features and controls for further customization.
