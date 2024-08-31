@@ -66,6 +66,9 @@ async function loadPage(path){
 
     // Set active sidebar item
     await setActiveClass(path);
+
+    // Format the codes elements
+    formatCodeElements();
     
 }
 
@@ -126,4 +129,29 @@ async function setActiveClass(path){
         if(item.getAttribute('href') === path) item.classList.add('active');
     });
 
+}
+
+async function formatCodeElements() {
+    // Get all <code> elements
+    const codeElements = document.querySelectorAll('article code');
+
+    codeElements.forEach((codeElement) => {
+        // Get the language class (like language-html)
+        const languageClass = codeElement.className.match(/language-\w+/);
+
+        if (languageClass) {
+            // Extract language name from class
+            const language = languageClass[0].split('-')[1];
+
+            // Decode HTML entities to convert back to code
+            const codeContent = codeElement.innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+            // Format the code using Prism.js or highlight.js
+            if (window.Prism) {
+                // Prism.js
+                const formattedCode = Prism.highlight(codeContent, Prism.languages[language], language);
+                codeElement.innerHTML = formattedCode;
+            }
+        }
+    });
 }

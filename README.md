@@ -45,7 +45,7 @@ In this example, the comment instructs Spotlight to greet the visitor and initia
 Next, include the Spotlight.js script by adding the following `<script>` tag at the very bottom of the `<body>` section of your webpage. This ensures that the script loads after the rest of your content. 
 
 ```html
-<script src="https://cdn.statically.io/gh/cttricks/spotlight.js/v0.1-beta/dist/spotlight.min.js" type="module" lights-on ></script>
+<script src="https://cdn.jsdelivr.net/gh/cttricks/spotlight.js/dist/spotlight.min.js" type="module" lights-on ></script>
 ```
 
 > Notice the `lights-on` attribute in the `<script>` tag—this works like magic, automatically activating Spotlight.js without requiring any additional configuration or code.

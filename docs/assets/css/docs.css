@@ -101,19 +101,6 @@ article blockquote {
     margin-left: 2px;
 }
 
-article pre {
-    background: #E0F0FF;
-    border-left: 5px solid #55AAFF;
-    padding: 16px 12px;
-    margin-left: 2px;
-}
-
-article code {
-    background: #E0F0FF;
-    font-family: monospace;
-    font-size: 0.9em;
-}
-
 article table {
     border-spacing: 0px;
     border-right: 1px solid gray;
@@ -138,4 +125,12 @@ article ul {
 article ol {
     margin-inline-start: 25px;
     margin-inline-end: 25px;
+}
+
+article pre code {
+    display: block;
+    padding: 10px 16px;
+    background-color: #fff !Important;
+    border-radius: 5px;
+    overflow-x: auto;
 }
