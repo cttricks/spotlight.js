@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Catch target element
         let elm = e.target;
 
+        // Handel href starting with link:
+        if(elm.getAttribute('href').startsWith('link:')){
+            elm.setAttribute('href', elm.getAttribute('href').substring(5));
+            elm.setAttribute('type', 'link');
+        }
+
         // Skip if there is no link attribute available, 
         if(!elm.getAttribute('type')) return;
         if(elm.getAttribute('type') !== 'link') return;
