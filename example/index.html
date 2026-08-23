@@ -68,13 +68,23 @@
     <!-- Live Customization Playground -->
     <div class="playground">
       <h2>Live Configurator</h2>
-      
+
+      <!-- Navigation Tabs -->
+      <div class="playground-nav">
+        <button class="playground-nav-btn active" data-target="general">General</button>
+        <button class="playground-nav-btn" data-target="buttons">Buttons</button>
+        <button class="playground-nav-btn" data-target="content">Content</button>
+        <button class="playground-nav-btn" data-target="modal">Modal / Tooltip</button>
+        <button class="playground-nav-btn" data-target="progress">Progress</button>
+        <button class="playground-nav-btn" data-target="arrow">Arrow</button>
+      </div>
+
       <div class="playground-layout">
         <!-- Left Section: Controls -->
         <div class="config-sections">
           
           <!-- GENERAL -->
-          <div class="config-group">
+          <div class="config-group active" id="general">
             <h3>General</h3>
             <div class="controls-grid">
               <div class="control-item">
@@ -112,7 +122,7 @@
           </div>
 
           <!-- BUTTONS -->
-          <div class="config-group">
+          <div class="config-group" id="buttons">
             <h3>Buttons</h3>
             
             <div class="config-subgroup">
@@ -147,7 +157,7 @@
           </div>
 
           <!-- CONTENT -->
-          <div class="config-group">
+          <div class="config-group" id="content">
             <h3>Content</h3>
             
             <div class="config-subgroup">
@@ -174,7 +184,7 @@
           </div>
 
           <!-- MODAL / TOOLTIP -->
-          <div class="config-group">
+          <div class="config-group" id="modal">
             <h3>Modal / Tooltip</h3>
             <div class="controls-grid">
               <div class="control-item"><label>Background</label><input type="color" id="modal-background" value="#2d2d2d" /></div>
@@ -193,7 +203,7 @@
           </div>
 
           <!-- PROGRESS -->
-          <div class="config-group">
+          <div class="config-group" id="progress">
             <h3>Progress</h3>
             <div class="controls-grid">
               <div class="control-item">
@@ -210,7 +220,7 @@
           </div>
 
           <!-- ARROW -->
-          <div class="config-group">
+          <div class="config-group" id="arrow">
             <h3>Arrow</h3>
             <div class="controls-grid">
               <div class="control-item">
@@ -242,198 +252,220 @@
   <script type="module">
     import { spotlight } from 'http://localhost:3000/index.js';
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const config = {
-        theme: "dark",
-        layout: {
-          highlightColor: "#ff751a",
-          highlighterBorderWidth: 3,
-          highlighterBorderRadius: 4,
-          highlighterPadding: 4,
-          overlayOpacity: 0.65,
-          zIndex: 9999
-        },
-        button: {
-          primary: {
-            background: "#4d1ff4",
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Navigation tab functionality
+        const navButtons = document.querySelectorAll('.playground-nav-btn');
+        const configGroups = document.querySelectorAll('.config-group');
+
+        navButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            // Remove active class from all buttons and groups
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            configGroups.forEach(group => group.classList.remove('active'));
+
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            // Show corresponding config group
+            const targetId = button.getAttribute('data-target');
+            const targetGroup = document.getElementById(targetId);
+            if (targetGroup) {
+              targetGroup.classList.add('active');
+            }
+          });
+        });
+
+        const config = {
+          theme: "dark",
+          layout: {
+            highlightColor: "#ff751a",
+            highlighterBorderWidth: 3,
+            highlighterBorderRadius: 4,
+            highlighterPadding: 4,
+            overlayOpacity: 0.65,
+            zIndex: 9999
+          },
+          button: {
+            primary: {
+              background: "#4d1ff4",
+              text: "#ffffff",
+              borderColor: "transparent",
+              borderWidth: 0,
+              borderRadius: 4,
+              fontSize: "14px",
+              fontWeight: "500",
+              paddingX: "14px",
+              paddingY: "8px"
+            },
+            secondary: {
+              background: "#000000",
+              text: "#ffffff",
+              borderColor: "#333333",
+              borderWidth: 1,
+              borderRadius: 4,
+              fontSize: "14px",
+              fontWeight: "500",
+              paddingX: "14px",
+              paddingY: "8px"
+            }
+          },
+          content: {
+            title: {
+              fontSize: "20px",
+              fontWeight: "600",
+              lineHeight: "1.3",
+              letterSpacing: "0",
+              marginBottom: "10px"
+            },
+            description: {
+              fontSize: "14px",
+              fontWeight: "400",
+              lineHeight: "1.6",
+              letterSpacing: "0",
+              marginBottom: "16px"
+            }
+          },
+          modal: {
+            background: "#2d2d2d",
             text: "#ffffff",
             borderColor: "transparent",
             borderWidth: 0,
             borderRadius: 4,
-            fontSize: "14px",
-            fontWeight: "500",
-            paddingX: "14px",
-            paddingY: "8px"
+            shadowColor: "#000000",
+            shadowBlur: 20,
+            shadowSpread: 0,
+            paddingX: "18px",
+            paddingY: "16px",
+            width: "375px",
+            gap: "12px"
           },
-          secondary: {
-            background: "#000000",
-            text: "#ffffff",
-            borderColor: "#333333",
-            borderWidth: 1,
-            borderRadius: 4,
-            fontSize: "14px",
+          progress: {
+            enabled: true,
+            fontSize: "12px",
             fontWeight: "500",
-            paddingX: "14px",
-            paddingY: "8px"
-          }
-        },
-        content: {
-          title: {
-            fontSize: "20px",
-            fontWeight: "600",
-            lineHeight: "1.3",
-            letterSpacing: "0",
-            marginBottom: "10px"
+            opacity: 0.8
           },
-          description: {
-            fontSize: "14px",
-            fontWeight: "400",
-            lineHeight: "1.6",
-            letterSpacing: "0",
-            marginBottom: "16px"
+          arrow: {
+            enabled: true,
+            size: 10
           }
-        },
-        modal: {
-          background: "#2d2d2d",
-          text: "#ffffff",
-          borderColor: "transparent",
-          borderWidth: 0,
-          borderRadius: 4,
-          shadowColor: "#000000",
-          shadowBlur: 20,
-          shadowSpread: 0,
-          paddingX: "18px",
-          paddingY: "16px",
-          width: "375px",
-          gap: "12px"
-        },
-        progress: {
-          enabled: true,
-          fontSize: "12px",
-          fontWeight: "500",
-          opacity: 0.8
-        },
-        arrow: {
-          enabled: true,
-          size: 10
-        }
-      };
+        };
 
-      let tour = await spotlight(config);
+        let tour = await spotlight(config);
 
-      const updateJSON = () => {
-        document.getElementById('json-output').textContent = JSON.stringify(config, null, 2);
-      };
+        const updateJSON = () => {
+          document.getElementById('json-output').textContent = JSON.stringify(config, null, 2);
+        };
 
-      updateJSON();
+        updateJSON();
 
-      // Helper to bind inputs
-      const bindInput = (id, obj, key, isNumber = false, isBool = false) => {
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener('input', (e) => {
-          let val = e.target.value;
-          if(isNumber) val = parseFloat(val) || 0;
-          if(isBool) val = e.target.value === 'true';
-          obj[key] = val;
-          tour = spotlight(config); // re-init or apply live
-          updateJSON();
-        });
-        if(el.tagName === 'SELECT') {
-          el.addEventListener('change', (e) => {
+        // Helper to bind inputs
+        const bindInput = (id, obj, key, isNumber = false, isBool = false) => {
+          const el = document.getElementById(id);
+          if(!el) return;
+          el.addEventListener('input', (e) => {
             let val = e.target.value;
+            if(isNumber) val = parseFloat(val) || 0;
             if(isBool) val = e.target.value === 'true';
             obj[key] = val;
-            tour = spotlight(config);
+            tour = spotlight(config); // re-init or apply live
             updateJSON();
           });
-        }
-      };
+          if(el.tagName === 'SELECT') {
+            el.addEventListener('change', (e) => {
+              let val = e.target.value;
+              if(isBool) val = e.target.value === 'true';
+              obj[key] = val;
+              tour = spotlight(config);
+              updateJSON();
+            });
+          }
+        };
 
-      // Theme
-      document.getElementById('theme-select').addEventListener('change', (e) => {
-        config.theme = e.target.value;
-        tour.setTheme(config.theme);
-        document.documentElement.setAttribute('data-page-theme', config.theme);
-        updateJSON();
+        // Theme
+        document.getElementById('theme-select').addEventListener('change', (e) => {
+          config.theme = e.target.value;
+          tour.setTheme(config.theme);
+          document.documentElement.setAttribute('data-page-theme', config.theme);
+          updateJSON();
+        });
+
+        // Layout
+        bindInput('layout-highlightColor', config.layout, 'highlightColor');
+        bindInput('layout-highlighterBorderWidth', config.layout, 'highlighterBorderWidth', true);
+        bindInput('layout-highlighterBorderRadius', config.layout, 'highlighterBorderRadius', true);
+        bindInput('layout-highlighterPadding', config.layout, 'highlighterPadding', true);
+        bindInput('layout-overlayOpacity', config.layout, 'overlayOpacity', true);
+        bindInput('layout-zIndex', config.layout, 'zIndex', true);
+
+        // Primary Button
+        bindInput('btn-primary-background', config.button.primary, 'background');
+        bindInput('btn-primary-text', config.button.primary, 'text');
+        bindInput('btn-primary-borderColor', config.button.primary, 'borderColor');
+        bindInput('btn-primary-borderWidth', config.button.primary, 'borderWidth', true);
+        bindInput('btn-primary-borderRadius', config.button.primary, 'borderRadius', true);
+        bindInput('btn-primary-fontSize', config.button.primary, 'fontSize');
+        bindInput('btn-primary-fontWeight', config.button.primary, 'fontWeight');
+        bindInput('btn-primary-paddingX', config.button.primary, 'paddingX');
+        bindInput('btn-primary-paddingY', config.button.primary, 'paddingY');
+
+        // Secondary Button
+        bindInput('btn-secondary-background', config.button.secondary, 'background');
+        bindInput('btn-secondary-text', config.button.secondary, 'text');
+        bindInput('btn-secondary-borderColor', config.button.secondary, 'borderColor');
+        bindInput('btn-secondary-borderWidth', config.button.secondary, 'borderWidth', true);
+        bindInput('btn-secondary-borderRadius', config.button.secondary, 'borderRadius', true);
+        bindInput('btn-secondary-fontSize', config.button.secondary, 'fontSize');
+        bindInput('btn-secondary-fontWeight', config.button.secondary, 'fontWeight');
+        bindInput('btn-secondary-paddingX', config.button.secondary, 'paddingX');
+        bindInput('btn-secondary-paddingY', config.button.secondary, 'paddingY');
+
+        // Content Title
+        bindInput('content-title-fontSize', config.content.title, 'fontSize');
+        bindInput('content-title-fontWeight', config.content.title, 'fontWeight');
+        bindInput('content-title-lineHeight', config.content.title, 'lineHeight');
+        bindInput('content-title-letterSpacing', config.content.title, 'letterSpacing');
+        bindInput('content-title-marginBottom', config.content.title, 'marginBottom');
+
+        // Content Description
+        bindInput('content-desc-fontSize', config.content.description, 'fontSize');
+        bindInput('content-desc-fontWeight', config.content.description, 'fontWeight');
+        bindInput('content-desc-lineHeight', config.content.description, 'lineHeight');
+        bindInput('content-desc-letterSpacing', config.content.description, 'letterSpacing');
+        bindInput('content-desc-marginBottom', config.content.description, 'marginBottom');
+
+        // Modal
+        bindInput('modal-background', config.modal, 'background');
+        bindInput('modal-text', config.modal, 'text');
+        bindInput('modal-borderColor', config.modal, 'borderColor');
+        bindInput('modal-borderWidth', config.modal, 'borderWidth', true);
+        bindInput('modal-borderRadius', config.modal, 'borderRadius', true);
+        bindInput('modal-width', config.modal, 'width');
+        bindInput('modal-paddingX', config.modal, 'paddingX');
+        bindInput('modal-paddingY', config.modal, 'paddingY');
+        bindInput('modal-gap', config.modal, 'gap');
+        bindInput('modal-shadowColor', config.modal, 'shadowColor');
+        bindInput('modal-shadowBlur', config.modal, 'shadowBlur', true);
+        bindInput('modal-shadowSpread', config.modal, 'shadowSpread', true);
+
+        // Progress
+        bindInput('progress-enabled', config.progress, 'enabled', false, true);
+        bindInput('progress-fontSize', config.progress, 'fontSize');
+        bindInput('progress-fontWeight', config.progress, 'fontWeight');
+        bindInput('progress-opacity', config.progress, 'opacity', true);
+
+        // Arrow
+        bindInput('arrow-enabled', config.arrow, 'enabled', false, true);
+        bindInput('arrow-size', config.arrow, 'size', true);
+
+        document.getElementById('copy-json').addEventListener('click', () => {
+          navigator.clipboard.writeText(document.getElementById('json-output').textContent);
+          const btn = document.getElementById('copy-json');
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = originalText, 2000);
+        });
       });
-
-      // Layout
-      bindInput('layout-highlightColor', config.layout, 'highlightColor');
-      bindInput('layout-highlighterBorderWidth', config.layout, 'highlighterBorderWidth', true);
-      bindInput('layout-highlighterBorderRadius', config.layout, 'highlighterBorderRadius', true);
-      bindInput('layout-highlighterPadding', config.layout, 'highlighterPadding', true);
-      bindInput('layout-overlayOpacity', config.layout, 'overlayOpacity', true);
-      bindInput('layout-zIndex', config.layout, 'zIndex', true);
-
-      // Primary Button
-      bindInput('btn-primary-background', config.button.primary, 'background');
-      bindInput('btn-primary-text', config.button.primary, 'text');
-      bindInput('btn-primary-borderColor', config.button.primary, 'borderColor');
-      bindInput('btn-primary-borderWidth', config.button.primary, 'borderWidth', true);
-      bindInput('btn-primary-borderRadius', config.button.primary, 'borderRadius', true);
-      bindInput('btn-primary-fontSize', config.button.primary, 'fontSize');
-      bindInput('btn-primary-fontWeight', config.button.primary, 'fontWeight');
-      bindInput('btn-primary-paddingX', config.button.primary, 'paddingX');
-      bindInput('btn-primary-paddingY', config.button.primary, 'paddingY');
-
-      // Secondary Button
-      bindInput('btn-secondary-background', config.button.secondary, 'background');
-      bindInput('btn-secondary-text', config.button.secondary, 'text');
-      bindInput('btn-secondary-borderColor', config.button.secondary, 'borderColor');
-      bindInput('btn-secondary-borderWidth', config.button.secondary, 'borderWidth', true);
-      bindInput('btn-secondary-borderRadius', config.button.secondary, 'borderRadius', true);
-      bindInput('btn-secondary-fontSize', config.button.secondary, 'fontSize');
-      bindInput('btn-secondary-fontWeight', config.button.secondary, 'fontWeight');
-      bindInput('btn-secondary-paddingX', config.button.secondary, 'paddingX');
-      bindInput('btn-secondary-paddingY', config.button.secondary, 'paddingY');
-
-      // Content Title
-      bindInput('content-title-fontSize', config.content.title, 'fontSize');
-      bindInput('content-title-fontWeight', config.content.title, 'fontWeight');
-      bindInput('content-title-lineHeight', config.content.title, 'lineHeight');
-      bindInput('content-title-letterSpacing', config.content.title, 'letterSpacing');
-      bindInput('content-title-marginBottom', config.content.title, 'marginBottom');
-
-      // Content Description
-      bindInput('content-desc-fontSize', config.content.description, 'fontSize');
-      bindInput('content-desc-fontWeight', config.content.description, 'fontWeight');
-      bindInput('content-desc-lineHeight', config.content.description, 'lineHeight');
-      bindInput('content-desc-letterSpacing', config.content.description, 'letterSpacing');
-      bindInput('content-desc-marginBottom', config.content.description, 'marginBottom');
-
-      // Modal
-      bindInput('modal-background', config.modal, 'background');
-      bindInput('modal-text', config.modal, 'text');
-      bindInput('modal-borderColor', config.modal, 'borderColor');
-      bindInput('modal-borderWidth', config.modal, 'borderWidth', true);
-      bindInput('modal-borderRadius', config.modal, 'borderRadius', true);
-      bindInput('modal-width', config.modal, 'width');
-      bindInput('modal-paddingX', config.modal, 'paddingX');
-      bindInput('modal-paddingY', config.modal, 'paddingY');
-      bindInput('modal-gap', config.modal, 'gap');
-      bindInput('modal-shadowColor', config.modal, 'shadowColor');
-      bindInput('modal-shadowBlur', config.modal, 'shadowBlur', true);
-      bindInput('modal-shadowSpread', config.modal, 'shadowSpread', true);
-
-      // Progress
-      bindInput('progress-enabled', config.progress, 'enabled', false, true);
-      bindInput('progress-fontSize', config.progress, 'fontSize');
-      bindInput('progress-fontWeight', config.progress, 'fontWeight');
-      bindInput('progress-opacity', config.progress, 'opacity', true);
-
-      // Arrow
-      bindInput('arrow-enabled', config.arrow, 'enabled', false, true);
-      bindInput('arrow-size', config.arrow, 'size', true);
-
-      document.getElementById('copy-json').addEventListener('click', () => {
-        navigator.clipboard.writeText(document.getElementById('json-output').textContent);
-        const btn = document.getElementById('copy-json');
-        const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = originalText, 2000);
-      });
-    });
   </script>
 </body>
 

@@ -179,11 +179,50 @@ button.secondary:hover {
     gap: 24px;
 }
 
+/* Navigation Tabs for Live Configurator */
+.playground-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.playground-nav-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.playground-nav-btn:hover {
+    color: var(--text);
+    background: var(--card-bg);
+}
+
+.playground-nav-btn.active {
+    color: var(--text);
+    background: var(--card-bg);
+    border-color: var(--card-border);
+}
+
 .config-group {
     border: 1px solid var(--card-border);
     border-radius: 8px;
     padding: 16px;
     background: var(--bg);
+    display: none; /* Hidden by default */
+}
+
+.config-group.active {
+    display: block; /* Shown when active */
 }
 
 .config-group h3 {
