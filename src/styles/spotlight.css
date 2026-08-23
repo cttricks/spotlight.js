@@ -129,13 +129,13 @@
 }
 
 .sl-footer {
-  display: grid;
-  grid-template-columns: auto 70px 50px;
-  gap: 5px;
+  display: flex;
+  gap: 4px;
   align-items: center;
 }
 
 .sl-spot {
+  width: 100%;
   font-size: var(--sl-progress-font-size);
   font-weight: var(--sl-progress-font-weight);
   opacity: var(--sl-progress-opacity);
@@ -143,16 +143,20 @@
 }
 
 .sl-button {
-  text-align: center;
-  cursor: pointer;
-  transition: opacity var(--sl-animation-duration);
-  background-color: var(--sl-secondary-btn-bg);
-  color: var(--sl-secondary-btn-text);
   border: var(--sl-secondary-btn-border-width) solid var(--sl-secondary-btn-border-color);
-  border-radius: var(--sl-secondary-btn-border-radius);
+  text-align: center;
   font-size: var(--sl-secondary-btn-font-size);
   font-weight: var(--sl-secondary-btn-font-weight);
   padding: var(--sl-secondary-btn-padding-y) var(--sl-secondary-btn-padding-x);
+  border-radius: var(--sl-secondary-btn-border-radius);
+  color: var(--sl-secondary-btn-text);
+  background-color: var(--sl-secondary-btn-bg);
+  opacity: .8;
+  cursor: pointer;
+  transition: opacity var(--sl-animation-duration);
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
 }
 
 .sl-button:hover {
@@ -173,6 +177,9 @@
   font-size: var(--sl-primary-btn-font-size);
   font-weight: var(--sl-primary-btn-font-weight);
   padding: var(--sl-primary-btn-padding-y) var(--sl-primary-btn-padding-x);
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
 }
 
 #spotlight-cover rect[stroke] {

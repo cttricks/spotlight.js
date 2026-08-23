@@ -8,29 +8,16 @@
   <title>Spotlight JS — Interactive Tour Engine</title>
   <link rel="stylesheet" href="http://localhost:3000/styles/spotlight.css" />
   <link rel="stylesheet" href="/style.css">
-  <style>
-    .config-group {
-      margin-bottom: 20px;
-    }
-    .config-subgroup {
-      margin-top: 12px;
-      padding: 10px;
-      border: 1px dashed var(--card-border);
-      border-radius: 6px;
-    }
-    .config-subgroup h4 {
-      font-size: 0.85rem;
-      color: var(--text);
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-  </style>
 </head>
 
 <body>
 
   <div class="container">
-    <header>
+    <header style="position: relative;">
+      <div class="spotlight-holder">
+        <img src="/spotlight.png" height="200px" width="200px" />
+        <div class="spotlight-bulb"></div>
+      </div>
       <div class="badge">v2.0.0 • TypeScript Native</div>
       <!-- Spotlight #1; Welcome to Spotlight JS; Spotlight JS directs your user's attention seamlessly with a sleek, framework-agnostic tour engine. -->
       <h1>Spotlight JS</h1>
@@ -67,7 +54,10 @@
 
     <!-- Live Customization Playground -->
     <div class="playground">
-      <h2>Live Configurator</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Live Configurator</h2>
+        <button type="spotlight-button:start">Test Config</button>
+      </div>
 
       <!-- Navigation Tabs -->
       <div class="playground-nav">
@@ -82,7 +72,7 @@
       <div class="playground-layout">
         <!-- Left Section: Controls -->
         <div class="config-sections">
-          
+
           <!-- GENERAL -->
           <div class="config-group active" id="general">
             <h3>General</h3>
@@ -96,7 +86,7 @@
               </div>
               <div class="control-item">
                 <label>Highlight Color</label>
-                <input type="color" id="layout-highlightColor" value="#ff751a" />
+                <input type="color" id="layout-highlightColor" value="#cccccc" />
               </div>
               <div class="control-item">
                 <label>Border Width (px)</label>
@@ -124,34 +114,52 @@
           <!-- BUTTONS -->
           <div class="config-group" id="buttons">
             <h3>Buttons</h3>
-            
+
             <div class="config-subgroup">
               <h4>Primary Button</h4>
               <div class="controls-grid">
-                <div class="control-item"><label>Background</label><input type="color" id="btn-primary-background" value="#4d1ff4" /></div>
-                <div class="control-item"><label>Text Color</label><input type="color" id="btn-primary-text" value="#ffffff" /></div>
-                <div class="control-item"><label>Border Color</label><input type="color" id="btn-primary-borderColor" value="#000000" /></div>
-                <div class="control-item"><label>Border Width</label><input type="number" id="btn-primary-borderWidth" value="0" min="0" /></div>
-                <div class="control-item"><label>Radius (px)</label><input type="number" id="btn-primary-borderRadius" value="4" min="0" /></div>
-                <div class="control-item"><label>Font Size</label><input type="text" id="btn-primary-fontSize" value="14px" /></div>
-                <div class="control-item"><label>Font Weight</label><input type="text" id="btn-primary-fontWeight" value="500" /></div>
-                <div class="control-item"><label>Padding X</label><input type="text" id="btn-primary-paddingX" value="14px" /></div>
-                <div class="control-item"><label>Padding Y</label><input type="text" id="btn-primary-paddingY" value="8px" /></div>
+                <div class="control-item"><label>Background</label><input type="color" id="btn-primary-background"
+                    value="#4d1ff4" /></div>
+                <div class="control-item"><label>Text Color</label><input type="color" id="btn-primary-text"
+                    value="#ffffff" /></div>
+                <div class="control-item"><label>Border Color</label><input type="color" id="btn-primary-borderColor"
+                    value="#000000" /></div>
+                <div class="control-item"><label>Border Width</label><input type="number" id="btn-primary-borderWidth"
+                    value="0" min="0" /></div>
+                <div class="control-item"><label>Radius (px)</label><input type="number" id="btn-primary-borderRadius"
+                    value="4" min="0" /></div>
+                <div class="control-item"><label>Font Size</label><input type="text" id="btn-primary-fontSize"
+                    value="14px" /></div>
+                <div class="control-item"><label>Font Weight</label><input type="text" id="btn-primary-fontWeight"
+                    value="500" /></div>
+                <div class="control-item"><label>Padding X</label><input type="text" id="btn-primary-paddingX"
+                    value="14px" /></div>
+                <div class="control-item"><label>Padding Y</label><input type="text" id="btn-primary-paddingY"
+                    value="8px" /></div>
               </div>
             </div>
 
             <div class="config-subgroup">
               <h4>Secondary Button</h4>
               <div class="controls-grid">
-                <div class="control-item"><label>Background</label><input type="color" id="btn-secondary-background" value="#000000" /></div>
-                <div class="control-item"><label>Text Color</label><input type="color" id="btn-secondary-text" value="#ffffff" /></div>
-                <div class="control-item"><label>Border Color</label><input type="color" id="btn-secondary-borderColor" value="#333333" /></div>
-                <div class="control-item"><label>Border Width</label><input type="number" id="btn-secondary-borderWidth" value="1" min="0" /></div>
-                <div class="control-item"><label>Radius (px)</label><input type="number" id="btn-secondary-borderRadius" value="4" min="0" /></div>
-                <div class="control-item"><label>Font Size</label><input type="text" id="btn-secondary-fontSize" value="14px" /></div>
-                <div class="control-item"><label>Font Weight</label><input type="text" id="btn-secondary-fontWeight" value="500" /></div>
-                <div class="control-item"><label>Padding X</label><input type="text" id="btn-secondary-paddingX" value="14px" /></div>
-                <div class="control-item"><label>Padding Y</label><input type="text" id="btn-secondary-paddingY" value="8px" /></div>
+                <div class="control-item"><label>Background</label><input type="color" id="btn-secondary-background"
+                    value="#000000" /></div>
+                <div class="control-item"><label>Text Color</label><input type="color" id="btn-secondary-text"
+                    value="#ffffff" /></div>
+                <div class="control-item"><label>Border Color</label><input type="color" id="btn-secondary-borderColor"
+                    value="#333333" /></div>
+                <div class="control-item"><label>Border Width</label><input type="number" id="btn-secondary-borderWidth"
+                    value="1" min="0" /></div>
+                <div class="control-item"><label>Radius (px)</label><input type="number" id="btn-secondary-borderRadius"
+                    value="4" min="0" /></div>
+                <div class="control-item"><label>Font Size</label><input type="text" id="btn-secondary-fontSize"
+                    value="14px" /></div>
+                <div class="control-item"><label>Font Weight</label><input type="text" id="btn-secondary-fontWeight"
+                    value="500" /></div>
+                <div class="control-item"><label>Padding X</label><input type="text" id="btn-secondary-paddingX"
+                    value="14px" /></div>
+                <div class="control-item"><label>Padding Y</label><input type="text" id="btn-secondary-paddingY"
+                    value="8px" /></div>
               </div>
             </div>
           </div>
@@ -159,26 +167,36 @@
           <!-- CONTENT -->
           <div class="config-group" id="content">
             <h3>Content</h3>
-            
+
             <div class="config-subgroup">
               <h4>Title</h4>
               <div class="controls-grid">
-                <div class="control-item"><label>Font Size</label><input type="text" id="content-title-fontSize" value="20px" /></div>
-                <div class="control-item"><label>Font Weight</label><input type="text" id="content-title-fontWeight" value="600" /></div>
-                <div class="control-item"><label>Line Height</label><input type="text" id="content-title-lineHeight" value="1.3" /></div>
-                <div class="control-item"><label>Letter Spacing</label><input type="text" id="content-title-letterSpacing" value="0" /></div>
-                <div class="control-item"><label>Margin Bottom</label><input type="text" id="content-title-marginBottom" value="10px" /></div>
+                <div class="control-item"><label>Font Size</label><input type="text" id="content-title-fontSize"
+                    value="20px" /></div>
+                <div class="control-item"><label>Font Weight</label><input type="text" id="content-title-fontWeight"
+                    value="600" /></div>
+                <div class="control-item"><label>Line Height</label><input type="text" id="content-title-lineHeight"
+                    value="1.3" /></div>
+                <div class="control-item"><label>Letter Spacing</label><input type="text"
+                    id="content-title-letterSpacing" value="0" /></div>
+                <div class="control-item"><label>Margin Bottom</label><input type="text" id="content-title-marginBottom"
+                    value="10px" /></div>
               </div>
             </div>
 
             <div class="config-subgroup">
               <h4>Description</h4>
               <div class="controls-grid">
-                <div class="control-item"><label>Font Size</label><input type="text" id="content-desc-fontSize" value="14px" /></div>
-                <div class="control-item"><label>Font Weight</label><input type="text" id="content-desc-fontWeight" value="400" /></div>
-                <div class="control-item"><label>Line Height</label><input type="text" id="content-desc-lineHeight" value="1.6" /></div>
-                <div class="control-item"><label>Letter Spacing</label><input type="text" id="content-desc-letterSpacing" value="0" /></div>
-                <div class="control-item"><label>Margin Bottom</label><input type="text" id="content-desc-marginBottom" value="16px" /></div>
+                <div class="control-item"><label>Font Size</label><input type="text" id="content-desc-fontSize"
+                    value="14px" /></div>
+                <div class="control-item"><label>Font Weight</label><input type="text" id="content-desc-fontWeight"
+                    value="400" /></div>
+                <div class="control-item"><label>Line Height</label><input type="text" id="content-desc-lineHeight"
+                    value="1.6" /></div>
+                <div class="control-item"><label>Letter Spacing</label><input type="text"
+                    id="content-desc-letterSpacing" value="0" /></div>
+                <div class="control-item"><label>Margin Bottom</label><input type="text" id="content-desc-marginBottom"
+                    value="16px" /></div>
               </div>
             </div>
           </div>
@@ -187,18 +205,28 @@
           <div class="config-group" id="modal">
             <h3>Modal / Tooltip</h3>
             <div class="controls-grid">
-              <div class="control-item"><label>Background</label><input type="color" id="modal-background" value="#2d2d2d" /></div>
-              <div class="control-item"><label>Text Color</label><input type="color" id="modal-text" value="#ffffff" /></div>
-              <div class="control-item"><label>Border Color</label><input type="color" id="modal-borderColor" value="#000000" /></div>
-              <div class="control-item"><label>Border Width</label><input type="number" id="modal-borderWidth" value="0" /></div>
-              <div class="control-item"><label>Radius (px)</label><input type="number" id="modal-borderRadius" value="4" /></div>
+              <div class="control-item"><label>Background</label><input type="color" id="modal-background"
+                  value="#2d2d2d" /></div>
+              <div class="control-item"><label>Text Color</label><input type="color" id="modal-text" value="#ffffff" />
+              </div>
+              <div class="control-item"><label>Border Color</label><input type="color" id="modal-borderColor"
+                  value="#000000" /></div>
+              <div class="control-item"><label>Border Width</label><input type="number" id="modal-borderWidth"
+                  value="0" /></div>
+              <div class="control-item"><label>Radius (px)</label><input type="number" id="modal-borderRadius"
+                  value="4" /></div>
               <div class="control-item"><label>Width</label><input type="text" id="modal-width" value="375px" /></div>
-              <div class="control-item"><label>Padding X</label><input type="text" id="modal-paddingX" value="18px" /></div>
-              <div class="control-item"><label>Padding Y</label><input type="text" id="modal-paddingY" value="16px" /></div>
+              <div class="control-item"><label>Padding X</label><input type="text" id="modal-paddingX" value="18px" />
+              </div>
+              <div class="control-item"><label>Padding Y</label><input type="text" id="modal-paddingY" value="16px" />
+              </div>
               <div class="control-item"><label>Gap</label><input type="text" id="modal-gap" value="12px" /></div>
-              <div class="control-item"><label>Shadow Color</label><input type="color" id="modal-shadowColor" value="#000000" /></div>
-              <div class="control-item"><label>Shadow Blur</label><input type="number" id="modal-shadowBlur" value="20" /></div>
-              <div class="control-item"><label>Shadow Spread</label><input type="number" id="modal-shadowSpread" value="0" /></div>
+              <div class="control-item"><label>Shadow Color</label><input type="color" id="modal-shadowColor"
+                  value="#000000" /></div>
+              <div class="control-item"><label>Shadow Blur</label><input type="number" id="modal-shadowBlur"
+                  value="20" /></div>
+              <div class="control-item"><label>Shadow Spread</label><input type="number" id="modal-shadowSpread"
+                  value="0" /></div>
             </div>
           </div>
 
@@ -213,9 +241,12 @@
                   <option value="false">False</option>
                 </select>
               </div>
-              <div class="control-item"><label>Font Size</label><input type="text" id="progress-fontSize" value="12px" /></div>
-              <div class="control-item"><label>Font Weight</label><input type="text" id="progress-fontWeight" value="500" /></div>
-              <div class="control-item"><label>Opacity</label><input type="number" id="progress-opacity" value="0.8" min="0" max="1" step="0.1" /></div>
+              <div class="control-item"><label>Font Size</label><input type="text" id="progress-fontSize"
+                  value="12px" /></div>
+              <div class="control-item"><label>Font Weight</label><input type="text" id="progress-fontWeight"
+                  value="500" /></div>
+              <div class="control-item"><label>Opacity</label><input type="number" id="progress-opacity" value="0.8"
+                  min="0" max="1" step="0.1" /></div>
             </div>
           </div>
 
@@ -238,10 +269,14 @@
 
         <!-- Right Section: JSON Output -->
         <div class="json-preview-container">
-          <div class="json-header">
+          <div class="json-header" style="display: none;">
             <h3>Configuration JSON</h3>
-            <button class="copy-btn" id="copy-json">Copy JSON</button>
+            <!-- <button class="copy-btn" id="copy-json">Copy JSON</button> -->
           </div>
+
+          <button class="copy-btn" id="copy-json">
+            Copy
+          </button>
           <pre class="json-preview" id="json-output"></pre>
         </div>
       </div>
@@ -251,221 +286,223 @@
 
   <script type="module">
     import { spotlight } from 'http://localhost:3000/index.js';
+    import { highlight } from '/json-syntax.js';
 
-      document.addEventListener('DOMContentLoaded', async () => {
-        // Navigation tab functionality
-        const navButtons = document.querySelectorAll('.playground-nav-btn');
-        const configGroups = document.querySelectorAll('.config-group');
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Navigation tab functionality
+      const navButtons = document.querySelectorAll('.playground-nav-btn');
+      const configGroups = document.querySelectorAll('.config-group');
 
-        navButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            // Remove active class from all buttons and groups
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            configGroups.forEach(group => group.classList.remove('active'));
+      navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and groups
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          configGroups.forEach(group => group.classList.remove('active'));
 
-            // Add active class to clicked button
-            button.classList.add('active');
+          // Add active class to clicked button
+          button.classList.add('active');
 
-            // Show corresponding config group
-            const targetId = button.getAttribute('data-target');
-            const targetGroup = document.getElementById(targetId);
-            if (targetGroup) {
-              targetGroup.classList.add('active');
-            }
-          });
+          // Show corresponding config group
+          const targetId = button.getAttribute('data-target');
+          const targetGroup = document.getElementById(targetId);
+          if (targetGroup) {
+            targetGroup.classList.add('active');
+          }
         });
+      });
 
-        const config = {
-          theme: "dark",
-          layout: {
-            highlightColor: "#ff751a",
-            highlighterBorderWidth: 3,
-            highlighterBorderRadius: 4,
-            highlighterPadding: 4,
-            overlayOpacity: 0.65,
-            zIndex: 9999
-          },
-          button: {
-            primary: {
-              background: "#4d1ff4",
-              text: "#ffffff",
-              borderColor: "transparent",
-              borderWidth: 0,
-              borderRadius: 4,
-              fontSize: "14px",
-              fontWeight: "500",
-              paddingX: "14px",
-              paddingY: "8px"
-            },
-            secondary: {
-              background: "#000000",
-              text: "#ffffff",
-              borderColor: "#333333",
-              borderWidth: 1,
-              borderRadius: 4,
-              fontSize: "14px",
-              fontWeight: "500",
-              paddingX: "14px",
-              paddingY: "8px"
-            }
-          },
-          content: {
-            title: {
-              fontSize: "20px",
-              fontWeight: "600",
-              lineHeight: "1.3",
-              letterSpacing: "0",
-              marginBottom: "10px"
-            },
-            description: {
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "1.6",
-              letterSpacing: "0",
-              marginBottom: "16px"
-            }
-          },
-          modal: {
-            background: "#2d2d2d",
+      const config = {
+        theme: "dark",
+        layout: {
+          highlightColor: "#cccccc",
+          highlighterBorderWidth: 3,
+          highlighterBorderRadius: 4,
+          highlighterPadding: 4,
+          overlayOpacity: 0.65,
+          zIndex: 9999
+        },
+        button: {
+          primary: {
+            background: "#4d1ff4",
             text: "#ffffff",
             borderColor: "transparent",
             borderWidth: 0,
             borderRadius: 4,
-            shadowColor: "#000000",
-            shadowBlur: 20,
-            shadowSpread: 0,
-            paddingX: "18px",
-            paddingY: "16px",
-            width: "375px",
-            gap: "12px"
-          },
-          progress: {
-            enabled: true,
-            fontSize: "12px",
+            fontSize: "14px",
             fontWeight: "500",
-            opacity: 0.8
+            paddingX: "14px",
+            paddingY: "8px"
           },
-          arrow: {
-            enabled: true,
-            size: 10
+          secondary: {
+            background: "#000000",
+            text: "#ffffff",
+            borderColor: "#333333",
+            borderWidth: 1,
+            borderRadius: 4,
+            fontSize: "14px",
+            fontWeight: "500",
+            paddingX: "14px",
+            paddingY: "8px"
           }
-        };
-
-        let tour = await spotlight(config);
-
-        const updateJSON = () => {
-          document.getElementById('json-output').textContent = JSON.stringify(config, null, 2);
-        };
-
-        updateJSON();
-
-        // Helper to bind inputs
-        const bindInput = (id, obj, key, isNumber = false, isBool = false) => {
-          const el = document.getElementById(id);
-          if(!el) return;
-          el.addEventListener('input', (e) => {
-            let val = e.target.value;
-            if(isNumber) val = parseFloat(val) || 0;
-            if(isBool) val = e.target.value === 'true';
-            obj[key] = val;
-            tour = spotlight(config); // re-init or apply live
-            updateJSON();
-          });
-          if(el.tagName === 'SELECT') {
-            el.addEventListener('change', (e) => {
-              let val = e.target.value;
-              if(isBool) val = e.target.value === 'true';
-              obj[key] = val;
-              tour = spotlight(config);
-              updateJSON();
-            });
+        },
+        content: {
+          title: {
+            fontSize: "20px",
+            fontWeight: "600",
+            lineHeight: "1.3",
+            letterSpacing: "0",
+            marginBottom: "10px"
+          },
+          description: {
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.6",
+            letterSpacing: "0",
+            marginBottom: "16px"
           }
-        };
+        },
+        modal: {
+          background: "#2d2d2d",
+          text: "#ffffff",
+          borderColor: "transparent",
+          borderWidth: 0,
+          borderRadius: 4,
+          shadowColor: "#000000",
+          shadowBlur: 20,
+          shadowSpread: 0,
+          paddingX: "18px",
+          paddingY: "16px",
+          width: "375px",
+          gap: "12px"
+        },
+        progress: {
+          enabled: true,
+          fontSize: "12px",
+          fontWeight: "500",
+          opacity: 0.8
+        },
+        arrow: {
+          enabled: true,
+          size: 10
+        }
+      };
 
-        // Theme
-        document.getElementById('theme-select').addEventListener('change', (e) => {
-          config.theme = e.target.value;
-          tour.setTheme(config.theme);
-          document.documentElement.setAttribute('data-page-theme', config.theme);
+      let tour = await spotlight(config);
+
+      const updateJSON = () => {
+        // document.getElementById('json-output').textContent = JSON.stringify(config, null, 2);
+        document.getElementById('json-output').innerHTML = highlight(config);
+      };
+
+      updateJSON();
+
+      // Helper to bind inputs
+      const bindInput = (id, obj, key, isNumber = false, isBool = false) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', (e) => {
+          let val = e.target.value;
+          if (isNumber) val = parseFloat(val) || 0;
+          if (isBool) val = e.target.value === 'true';
+          obj[key] = val;
+          tour = spotlight(config); // re-init or apply live
           updateJSON();
         });
+        if (el.tagName === 'SELECT') {
+          el.addEventListener('change', (e) => {
+            let val = e.target.value;
+            if (isBool) val = e.target.value === 'true';
+            obj[key] = val;
+            tour = spotlight(config);
+            updateJSON();
+          });
+        }
+      };
 
-        // Layout
-        bindInput('layout-highlightColor', config.layout, 'highlightColor');
-        bindInput('layout-highlighterBorderWidth', config.layout, 'highlighterBorderWidth', true);
-        bindInput('layout-highlighterBorderRadius', config.layout, 'highlighterBorderRadius', true);
-        bindInput('layout-highlighterPadding', config.layout, 'highlighterPadding', true);
-        bindInput('layout-overlayOpacity', config.layout, 'overlayOpacity', true);
-        bindInput('layout-zIndex', config.layout, 'zIndex', true);
-
-        // Primary Button
-        bindInput('btn-primary-background', config.button.primary, 'background');
-        bindInput('btn-primary-text', config.button.primary, 'text');
-        bindInput('btn-primary-borderColor', config.button.primary, 'borderColor');
-        bindInput('btn-primary-borderWidth', config.button.primary, 'borderWidth', true);
-        bindInput('btn-primary-borderRadius', config.button.primary, 'borderRadius', true);
-        bindInput('btn-primary-fontSize', config.button.primary, 'fontSize');
-        bindInput('btn-primary-fontWeight', config.button.primary, 'fontWeight');
-        bindInput('btn-primary-paddingX', config.button.primary, 'paddingX');
-        bindInput('btn-primary-paddingY', config.button.primary, 'paddingY');
-
-        // Secondary Button
-        bindInput('btn-secondary-background', config.button.secondary, 'background');
-        bindInput('btn-secondary-text', config.button.secondary, 'text');
-        bindInput('btn-secondary-borderColor', config.button.secondary, 'borderColor');
-        bindInput('btn-secondary-borderWidth', config.button.secondary, 'borderWidth', true);
-        bindInput('btn-secondary-borderRadius', config.button.secondary, 'borderRadius', true);
-        bindInput('btn-secondary-fontSize', config.button.secondary, 'fontSize');
-        bindInput('btn-secondary-fontWeight', config.button.secondary, 'fontWeight');
-        bindInput('btn-secondary-paddingX', config.button.secondary, 'paddingX');
-        bindInput('btn-secondary-paddingY', config.button.secondary, 'paddingY');
-
-        // Content Title
-        bindInput('content-title-fontSize', config.content.title, 'fontSize');
-        bindInput('content-title-fontWeight', config.content.title, 'fontWeight');
-        bindInput('content-title-lineHeight', config.content.title, 'lineHeight');
-        bindInput('content-title-letterSpacing', config.content.title, 'letterSpacing');
-        bindInput('content-title-marginBottom', config.content.title, 'marginBottom');
-
-        // Content Description
-        bindInput('content-desc-fontSize', config.content.description, 'fontSize');
-        bindInput('content-desc-fontWeight', config.content.description, 'fontWeight');
-        bindInput('content-desc-lineHeight', config.content.description, 'lineHeight');
-        bindInput('content-desc-letterSpacing', config.content.description, 'letterSpacing');
-        bindInput('content-desc-marginBottom', config.content.description, 'marginBottom');
-
-        // Modal
-        bindInput('modal-background', config.modal, 'background');
-        bindInput('modal-text', config.modal, 'text');
-        bindInput('modal-borderColor', config.modal, 'borderColor');
-        bindInput('modal-borderWidth', config.modal, 'borderWidth', true);
-        bindInput('modal-borderRadius', config.modal, 'borderRadius', true);
-        bindInput('modal-width', config.modal, 'width');
-        bindInput('modal-paddingX', config.modal, 'paddingX');
-        bindInput('modal-paddingY', config.modal, 'paddingY');
-        bindInput('modal-gap', config.modal, 'gap');
-        bindInput('modal-shadowColor', config.modal, 'shadowColor');
-        bindInput('modal-shadowBlur', config.modal, 'shadowBlur', true);
-        bindInput('modal-shadowSpread', config.modal, 'shadowSpread', true);
-
-        // Progress
-        bindInput('progress-enabled', config.progress, 'enabled', false, true);
-        bindInput('progress-fontSize', config.progress, 'fontSize');
-        bindInput('progress-fontWeight', config.progress, 'fontWeight');
-        bindInput('progress-opacity', config.progress, 'opacity', true);
-
-        // Arrow
-        bindInput('arrow-enabled', config.arrow, 'enabled', false, true);
-        bindInput('arrow-size', config.arrow, 'size', true);
-
-        document.getElementById('copy-json').addEventListener('click', () => {
-          navigator.clipboard.writeText(document.getElementById('json-output').textContent);
-          const btn = document.getElementById('copy-json');
-          const originalText = btn.textContent;
-          btn.textContent = 'Copied!';
-          setTimeout(() => btn.textContent = originalText, 2000);
-        });
+      // Theme
+      document.getElementById('theme-select').addEventListener('change', (e) => {
+        config.theme = e.target.value;
+        tour.setTheme(config.theme);
+        document.documentElement.setAttribute('data-page-theme', config.theme);
+        updateJSON();
       });
+
+      // Layout
+      bindInput('layout-highlightColor', config.layout, 'highlightColor');
+      bindInput('layout-highlighterBorderWidth', config.layout, 'highlighterBorderWidth', true);
+      bindInput('layout-highlighterBorderRadius', config.layout, 'highlighterBorderRadius', true);
+      bindInput('layout-highlighterPadding', config.layout, 'highlighterPadding', true);
+      bindInput('layout-overlayOpacity', config.layout, 'overlayOpacity', true);
+      bindInput('layout-zIndex', config.layout, 'zIndex', true);
+
+      // Primary Button
+      bindInput('btn-primary-background', config.button.primary, 'background');
+      bindInput('btn-primary-text', config.button.primary, 'text');
+      bindInput('btn-primary-borderColor', config.button.primary, 'borderColor');
+      bindInput('btn-primary-borderWidth', config.button.primary, 'borderWidth', true);
+      bindInput('btn-primary-borderRadius', config.button.primary, 'borderRadius', true);
+      bindInput('btn-primary-fontSize', config.button.primary, 'fontSize');
+      bindInput('btn-primary-fontWeight', config.button.primary, 'fontWeight');
+      bindInput('btn-primary-paddingX', config.button.primary, 'paddingX');
+      bindInput('btn-primary-paddingY', config.button.primary, 'paddingY');
+
+      // Secondary Button
+      bindInput('btn-secondary-background', config.button.secondary, 'background');
+      bindInput('btn-secondary-text', config.button.secondary, 'text');
+      bindInput('btn-secondary-borderColor', config.button.secondary, 'borderColor');
+      bindInput('btn-secondary-borderWidth', config.button.secondary, 'borderWidth', true);
+      bindInput('btn-secondary-borderRadius', config.button.secondary, 'borderRadius', true);
+      bindInput('btn-secondary-fontSize', config.button.secondary, 'fontSize');
+      bindInput('btn-secondary-fontWeight', config.button.secondary, 'fontWeight');
+      bindInput('btn-secondary-paddingX', config.button.secondary, 'paddingX');
+      bindInput('btn-secondary-paddingY', config.button.secondary, 'paddingY');
+
+      // Content Title
+      bindInput('content-title-fontSize', config.content.title, 'fontSize');
+      bindInput('content-title-fontWeight', config.content.title, 'fontWeight');
+      bindInput('content-title-lineHeight', config.content.title, 'lineHeight');
+      bindInput('content-title-letterSpacing', config.content.title, 'letterSpacing');
+      bindInput('content-title-marginBottom', config.content.title, 'marginBottom');
+
+      // Content Description
+      bindInput('content-desc-fontSize', config.content.description, 'fontSize');
+      bindInput('content-desc-fontWeight', config.content.description, 'fontWeight');
+      bindInput('content-desc-lineHeight', config.content.description, 'lineHeight');
+      bindInput('content-desc-letterSpacing', config.content.description, 'letterSpacing');
+      bindInput('content-desc-marginBottom', config.content.description, 'marginBottom');
+
+      // Modal
+      bindInput('modal-background', config.modal, 'background');
+      bindInput('modal-text', config.modal, 'text');
+      bindInput('modal-borderColor', config.modal, 'borderColor');
+      bindInput('modal-borderWidth', config.modal, 'borderWidth', true);
+      bindInput('modal-borderRadius', config.modal, 'borderRadius', true);
+      bindInput('modal-width', config.modal, 'width');
+      bindInput('modal-paddingX', config.modal, 'paddingX');
+      bindInput('modal-paddingY', config.modal, 'paddingY');
+      bindInput('modal-gap', config.modal, 'gap');
+      bindInput('modal-shadowColor', config.modal, 'shadowColor');
+      bindInput('modal-shadowBlur', config.modal, 'shadowBlur', true);
+      bindInput('modal-shadowSpread', config.modal, 'shadowSpread', true);
+
+      // Progress
+      bindInput('progress-enabled', config.progress, 'enabled', false, true);
+      bindInput('progress-fontSize', config.progress, 'fontSize');
+      bindInput('progress-fontWeight', config.progress, 'fontWeight');
+      bindInput('progress-opacity', config.progress, 'opacity', true);
+
+      // Arrow
+      bindInput('arrow-enabled', config.arrow, 'enabled', false, true);
+      bindInput('arrow-size', config.arrow, 'size', true);
+
+      document.getElementById('copy-json').addEventListener('click', () => {
+        navigator.clipboard.writeText(document.getElementById('json-output').textContent);
+        const btn = document.getElementById('copy-json');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = originalText, 2000);
+      });
+    });
   </script>
 </body>
 

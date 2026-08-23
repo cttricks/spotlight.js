@@ -6,6 +6,14 @@
     --text-muted: #888888;
     --accent: #ffffff;
     --code-bg: #111111;
+
+    /* JSON syntax */
+    --json-key: #7dd3fc;
+    --json-string: #fdba8c;
+    --json-number: #a7d7a0;
+    --json-boolean: #c4a7e7;
+    --json-null: #8b8b8b;
+    --json-punctuation: #6f6f6f;
 }
 
 [data-page-theme="light"] {
@@ -16,6 +24,14 @@
     --text-muted: #666666;
     --accent: #000000;
     --code-bg: #f0f0f0;
+
+    /* JSON syntax */
+    --json-key: #0369a1;
+    --json-string: #c2410c;
+    --json-number: #3f7d20;
+    --json-boolean: #7c3aed;
+    --json-null: #737373;
+    --json-punctuation: #a3a3a3;
 }
 
 * {
@@ -282,6 +298,29 @@ input[type="color"] {
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: #333333 transparent;
+    position: relative;
+}
+
+.json-preview-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.json-preview-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.json-preview-container::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 999px;
+}
+
+.json-preview-container::-webkit-scrollbar-thumb:hover {
+    background: #4d4d4d;
 }
 
 .json-header {
@@ -299,9 +338,14 @@ input[type="color"] {
 }
 
 .copy-btn {
-    padding: 4px 12px;
-    font-size: 0.8rem;
-    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    position: absolute;
+    right: 24px;
+    top: 12px;
+    padding: 4px 8px 6px 8px;
 }
 
 pre.json-preview {
@@ -317,4 +361,38 @@ pre.json-preview {
     word-break: break-all;
     max-height: 500px;
     overflow-y: auto;
+}
+
+.config-group {
+    margin-bottom: 20px;
+}
+
+.config-subgroup {
+    margin-top: 12px;
+    padding: 10px;
+    border: 1px dashed var(--card-border);
+    border-radius: 6px;
+}
+
+.config-subgroup h4 {
+    font-size: 0.85rem;
+    color: var(--text);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.spotlight-holder {
+    top: -62px;
+    left: 0;
+    position: absolute;
+}
+
+.spotlight-bulb {
+    width: 36px;
+    height: 68px;
+    background: #fff;
+    position: relative;
+    top: -132px;
+    left: 98px;
+    z-index: -1;
 }
