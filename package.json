@@ -15,12 +15,13 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {
-    "build": "tsc",
+"scripts": {
+    "build": "tsc && npm run copy:css",
     "prepare": "npm run build",
-    "start:cdn": "serve dist -p 3000",
-    "start:example": "serve example -p 3001",
-    "clean": "rimraf dist"
+    "cdn": "serve dist -p 3000 --cors",
+    "start": "serve example -p 3001",
+    "clean": "rimraf dist",
+    "copy:css": "powershell -Command \"New-Item -ItemType Directory -Force -Path dist\\styles; Copy-Item -Path src\\styles\\spotlight.css -Destination dist\\styles\\spotlight.css -Force\""
   },
   "repository": {
     "type": "git",

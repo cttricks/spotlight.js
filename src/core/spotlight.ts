@@ -21,16 +21,78 @@ const conf: Conf = {
     coverBg: 'rgba(0, 0, 0, 0.5)',
     devMode: false,
     theme: 'light',
-    borderRadius: 4,
-    modalPadding: 15,
-    modalWidth: 300,
-    highlightColor: '#ffce5c',
-    highlightStrokeWidth: 3,
-    animationDuration: 300,
-    backdropOpacity: 0.5,
-    nextText: 'Next',
-    previousText: 'Previous',
-    doneText: 'Done'
+    layout: {
+        highlightColor: '#ffce5c',
+        highlighterBorderWidth: 3,
+        highlighterBorderRadius: 4,
+        highlighterPadding: 4,
+        overlayOpacity: 0.5,
+        zIndex: 9999
+    },
+    button: {
+        primary: {
+            background: '#2196F3',
+            text: '#ffffff',
+            borderColor: 'transparent',
+            borderWidth: 0,
+            borderRadius: 4,
+            fontSize: '13px',
+            fontWeight: '400',
+            paddingX: '12px',
+            paddingY: '3px'
+        },
+        secondary: {
+            background: 'transparent',
+            text: 'inherit',
+            borderColor: '#ccc',
+            borderWidth: 1,
+            borderRadius: 4,
+            fontSize: '13px',
+            fontWeight: '400',
+            paddingX: '12px',
+            paddingY: '3px'
+        }
+    },
+    content: {
+        title: {
+            fontSize: '20px',
+            fontWeight: '600',
+            lineHeight: '1.5',
+            letterSpacing: '0px',
+            marginBottom: '0px'
+        },
+        description: {
+            fontSize: '14px',
+            fontWeight: '400',
+            lineHeight: '1.5',
+            letterSpacing: '0px',
+            marginBottom: '0px'
+        }
+    },
+    modal: {
+        background: '#fcfcfc',
+        text: '#2d2d2d',
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: 4,
+        shadowColor: 'rgba(0, 0, 0, 0.2)',
+        shadowBlur: 20,
+        shadowSpread: 0,
+        paddingX: '15px',
+        paddingY: '15px',
+        width: '300px',
+        gap: '16px'
+    },
+    progress: {
+        enabled: true,
+        fontSize: '13px',
+        fontWeight: '400',
+        opacity: 0.7
+    },
+    arrow: {
+        enabled: true,
+        size: 16
+    }
 };
 
 const clientEvents = [
@@ -92,7 +154,7 @@ async function hilightElement(event: string): Promise<void> {
 
     if (!conf.highlightOnly) {
         showPopover(position, spot, index, totalComments, {
-            borderRadius: conf.borderRadius || 4,
+            borderRadius: conf.modal?.borderRadius || 4,
             nextText: conf.nextText || 'Next',
             previousText: conf.previousText || 'Previous',
             doneText: conf.doneText || 'Done'
@@ -194,14 +256,91 @@ export async function spotlight(options: SpotlightOptions = {}): Promise<Spotlig
     function updateCSSVariables(): void {
         const root = document.documentElement;
         root.style.setProperty('--sl-theme', conf.theme || 'light');
-        root.style.setProperty('--sl-border-radius', `${conf.borderRadius || 4}px`);
-        root.style.setProperty('--sl-modal-padding', `${conf.modalPadding || 15}px`);
-        root.style.setProperty('--sl-modal-width', `${conf.modalWidth || 300}px`);
-        root.style.setProperty('--sl-highlight-color', conf.highlightColor || '#ffce5c');
-        root.style.setProperty('--sl-highlight-stroke-width', `${conf.highlightStrokeWidth || 3}px`);
-        root.style.setProperty('--sl-animation-duration', `${conf.animationDuration || 300}ms`);
-        root.style.setProperty('--sl-backdrop-opacity', (conf.backdropOpacity || 0.5).toString());
 
+        // Layout
+        if (conf.layout) {
+            if (conf.layout.highlightColor) root.style.setProperty('--sl-highlight-color', conf.layout.highlightColor);
+            if (conf.layout.highlighterBorderWidth) root.style.setProperty('--sl-highlight-stroke-width', `${conf.layout.highlighterBorderWidth}px`);
+            if (conf.layout.highlighterBorderRadius) root.style.setProperty('--sl-border-radius', `${conf.layout.highlighterBorderRadius}px`);
+            if (conf.layout.overlayOpacity) root.style.setProperty('--sl-backdrop-opacity', conf.layout.overlayOpacity.toString());
+            if (conf.layout.zIndex) root.style.setProperty('--sl-z-index', conf.layout.zIndex.toString());
+        }
+
+        // Buttons
+        if (conf.button) {
+            if (conf.button.primary) {
+                if (conf.button.primary.background) root.style.setProperty('--sl-primary-btn-bg', conf.button.primary.background);
+                if (conf.button.primary.text) root.style.setProperty('--sl-primary-btn-text', conf.button.primary.text);
+                if (conf.button.primary.borderColor) root.style.setProperty('--sl-primary-btn-border-color', conf.button.primary.borderColor);
+                if (conf.button.primary.borderWidth) root.style.setProperty('--sl-primary-btn-border-width', `${conf.button.primary.borderWidth}px`);
+                if (conf.button.primary.borderRadius) root.style.setProperty('--sl-primary-btn-border-radius', `${conf.button.primary.borderRadius}px`);
+                if (conf.button.primary.fontSize) root.style.setProperty('--sl-primary-btn-font-size', conf.button.primary.fontSize);
+                if (conf.button.primary.fontWeight) root.style.setProperty('--sl-primary-btn-font-weight', conf.button.primary.fontWeight);
+                if (conf.button.primary.paddingX) root.style.setProperty('--sl-primary-btn-padding-x', conf.button.primary.paddingX);
+                if (conf.button.primary.paddingY) root.style.setProperty('--sl-primary-btn-padding-y', conf.button.primary.paddingY);
+            }
+            if (conf.button.secondary) {
+                if (conf.button.secondary.background) root.style.setProperty('--sl-secondary-btn-bg', conf.button.secondary.background);
+                if (conf.button.secondary.text) root.style.setProperty('--sl-secondary-btn-text', conf.button.secondary.text);
+                if (conf.button.secondary.borderColor) root.style.setProperty('--sl-secondary-btn-border-color', conf.button.secondary.borderColor);
+                if (conf.button.secondary.borderWidth) root.style.setProperty('--sl-secondary-btn-border-width', `${conf.button.secondary.borderWidth}px`);
+                if (conf.button.secondary.borderRadius) root.style.setProperty('--sl-secondary-btn-border-radius', `${conf.button.secondary.borderRadius}px`);
+                if (conf.button.secondary.fontSize) root.style.setProperty('--sl-secondary-btn-font-size', conf.button.secondary.fontSize);
+                if (conf.button.secondary.fontWeight) root.style.setProperty('--sl-secondary-btn-font-weight', conf.button.secondary.fontWeight);
+                if (conf.button.secondary.paddingX) root.style.setProperty('--sl-secondary-btn-padding-x', conf.button.secondary.paddingX);
+                if (conf.button.secondary.paddingY) root.style.setProperty('--sl-secondary-btn-padding-y', conf.button.secondary.paddingY);
+            }
+        }
+
+        // Content
+        if (conf.content) {
+            if (conf.content.title) {
+                if (conf.content.title.fontSize) root.style.setProperty('--sl-title-font-size', conf.content.title.fontSize);
+                if (conf.content.title.fontWeight) root.style.setProperty('--sl-title-font-weight', conf.content.title.fontWeight);
+                if (conf.content.title.lineHeight) root.style.setProperty('--sl-title-line-height', conf.content.title.lineHeight);
+                if (conf.content.title.letterSpacing) root.style.setProperty('--sl-title-letter-spacing', conf.content.title.letterSpacing);
+                if (conf.content.title.marginBottom) root.style.setProperty('--sl-title-margin-bottom', conf.content.title.marginBottom);
+            }
+            if (conf.content.description) {
+                if (conf.content.description.fontSize) root.style.setProperty('--sl-description-font-size', conf.content.description.fontSize);
+                if (conf.content.description.fontWeight) root.style.setProperty('--sl-description-font-weight', conf.content.description.fontWeight);
+                if (conf.content.description.lineHeight) root.style.setProperty('--sl-description-line-height', conf.content.description.lineHeight);
+                if (conf.content.description.letterSpacing) root.style.setProperty('--sl-description-letter-spacing', conf.content.description.letterSpacing);
+                if (conf.content.description.marginBottom) root.style.setProperty('--sl-description-margin-bottom', conf.content.description.marginBottom);
+            }
+        }
+
+        // Modal
+        if (conf.modal) {
+            if (conf.modal.background) root.style.setProperty('--sl-modal-bg', conf.modal.background);
+            if (conf.modal.text) root.style.setProperty('--sl-modal-text', conf.modal.text);
+            if (conf.modal.borderColor) root.style.setProperty('--sl-modal-border-color', conf.modal.borderColor);
+            if (conf.modal.borderWidth) root.style.setProperty('--sl-modal-border-width', `${conf.modal.borderWidth}px`);
+            if (conf.modal.borderRadius) root.style.setProperty('--sl-modal-border-radius', `${conf.modal.borderRadius}px`);
+            if (conf.modal.shadowColor) root.style.setProperty('--sl-shadow-color', conf.modal.shadowColor);
+            if (conf.modal.shadowBlur) root.style.setProperty('--sl-shadow-blur', `${conf.modal.shadowBlur}px`);
+            if (conf.modal.shadowSpread) root.style.setProperty('--sl-shadow-spread', `${conf.modal.shadowSpread}px`);
+            if (conf.modal.paddingX) root.style.setProperty('--sl-modal-padding-x', conf.modal.paddingX);
+            if (conf.modal.paddingY) root.style.setProperty('--sl-modal-padding-y', conf.modal.paddingY);
+            if (conf.modal.width) root.style.setProperty('--sl-modal-width', conf.modal.width);
+            if (conf.modal.gap) root.style.setProperty('--sl-modal-gap', conf.modal.gap);
+        }
+
+        // Progress
+        if (conf.progress) {
+            if (conf.progress.enabled !== undefined) root.style.setProperty('--sl-progress-enabled', conf.progress.enabled ? '1' : '0');
+            if (conf.progress.fontSize) root.style.setProperty('--sl-progress-font-size', conf.progress.fontSize);
+            if (conf.progress.fontWeight) root.style.setProperty('--sl-progress-font-weight', conf.progress.fontWeight);
+            if (conf.progress.opacity) root.style.setProperty('--sl-progress-opacity', conf.progress.opacity.toString());
+        }
+
+        // Arrow
+        if (conf.arrow) {
+            if (conf.arrow.enabled !== undefined) root.style.setProperty('--sl-arrow-enabled', conf.arrow.enabled ? '1' : '0');
+            if (conf.arrow.size) root.style.setProperty('--sl-arrow-size', `${conf.arrow.size}px`);
+        }
+
+        // Theme
         if (conf.theme === 'dark') {
             root.setAttribute('data-theme', 'dark');
         } else {
@@ -209,7 +348,7 @@ export async function spotlight(options: SpotlightOptions = {}): Promise<Spotlig
         }
 
         setPopoverStyles(conf);
-        setHighlightRadius(conf.borderRadius || 4);
+        setHighlightRadius(conf.layout?.highlighterBorderRadius || 4);
     }
 
     // Initialize
@@ -247,17 +386,32 @@ export async function spotlight(options: SpotlightOptions = {}): Promise<Spotlig
             updateCSSVariables();
         },
         setBorderRadius: (radius: number) => {
-            conf.borderRadius = radius;
+            if (!conf.modal) conf.modal = {};
+            conf.modal.borderRadius = radius;
             updateCSSVariables();
         },
         setHighlightColor: (color: string) => {
-            conf.highlightColor = color;
+            if (!conf.layout) conf.layout = {};
+            conf.layout.highlightColor = color;
             setStroke(color);
             updateCSSVariables();
         },
         setHighlightStrokeWidth: (width: number) => {
-            conf.highlightStrokeWidth = width;
+            if (!conf.layout) conf.layout = {};
+            conf.layout.highlighterBorderWidth = width;
             setStrokeWidth(width);
+            updateCSSVariables();
+        },
+        setPrimaryButtonColor: (color: string) => {
+            if (!conf.button) conf.button = {};
+            if (!conf.button.primary) conf.button.primary = {};
+            conf.button.primary.background = color;
+            updateCSSVariables();
+        },
+        setSecondaryButtonColor: (color: string) => {
+            if (!conf.button) conf.button = {};
+            if (!conf.button.secondary) conf.button.secondary = {};
+            conf.button.secondary.background = color;
             updateCSSVariables();
         }
     };

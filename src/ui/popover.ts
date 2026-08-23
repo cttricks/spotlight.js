@@ -92,8 +92,53 @@ export function showPopover(position: DOMRect, spot: Spot, index: number, totalC
 
 export function setPopoverStyles(options: any): void {
     createPopover();
-    popover.style.borderRadius = `${options.borderRadius}px`;
-    popover.style.padding = `${options.modalPadding}px`;
-    popover.style.maxWidth = `${options.modalWidth}px`;
-    popover.style.transition = `all ${options.animationDuration}ms ease`;
+    popover.style.borderRadius = `${options.modal?.borderRadius || 4}px`;
+    popover.style.padding = `${options.modal?.paddingY || 15}px ${options.modal?.paddingX || 15}px`;
+    popover.style.maxWidth = `${options.modal?.width || 300}px`;
+    popover.style.transition = `all ${options.animationDuration || 300}ms ease`;
+    popover.style.backgroundColor = options.modal?.background || '#fcfcfc';
+    popover.style.color = options.modal?.text || '#2d2d2d';
+    popover.style.border = `${options.modal?.borderWidth || 0}px solid ${options.modal?.borderColor || 'transparent'}`;
+    popover.style.boxShadow = `4px 10px ${options.modal?.shadowBlur || 20}px ${options.modal?.shadowColor || 'rgba(0, 0, 0, 0.2)'}`;
+    popover.style.gap = `${options.modal?.gap || 16}px`;
+
+    if (options.shadowColor) {
+        popover.style.boxShadow = `4px 10px ${options.modal?.shadowBlur || 20}px ${options.shadowColor}`;
+    }
+
+    if (options.content?.title) {
+        Object.assign(title.style, {
+            fontSize: options.content.title.fontSize || '20px',
+            fontWeight: options.content.title.fontWeight || '600',
+            lineHeight: options.content.title.lineHeight || '1.5',
+            letterSpacing: options.content.title.letterSpacing || '0px',
+            marginBottom: options.content.title.marginBottom || '0px'
+        });
+    }
+
+    if (options.content?.description) {
+        Object.assign(description.style, {
+            fontSize: options.content.description.fontSize || '14px',
+            fontWeight: options.content.description.fontWeight || '400',
+            lineHeight: options.content.description.lineHeight || '1.5',
+            letterSpacing: options.content.description.letterSpacing || '0px',
+            marginBottom: options.content.description.marginBottom || '0px'
+        });
+    }
+
+    if (options.progress) {
+        message.style.display = options.progress.enabled ? 'block' : 'none';
+        message.style.fontSize = options.progress.fontSize || '13px';
+        message.style.fontWeight = options.progress.fontWeight || '400';
+        message.style.opacity = options.progress.opacity?.toString() || '0.7';
+    }
+
+    if (options.arrow) {
+        const arrow = popover.querySelector(':before') as HTMLElement;
+        if (arrow) {
+            arrow.style.display = options.arrow.enabled ? 'block' : 'none';
+            arrow.style.height = `${options.arrow.size || 16}px`;
+            arrow.style.width = `${options.arrow.size || 16}px`;
+        }
+    }
 }

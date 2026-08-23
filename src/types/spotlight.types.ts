@@ -12,18 +12,83 @@ export interface Comment {
 }
 
 export interface SpotlightOptions {
-    devMode?: boolean;
     theme?: 'light' | 'dark' | string;
-    borderRadius?: number;
-    modalPadding?: number;
-    modalWidth?: number;
-    highlightColor?: string;
-    highlightStrokeWidth?: number;
-    animationDuration?: number;
-    backdropOpacity?: number;
+    devMode?: boolean;
     nextText?: string;
     previousText?: string;
     doneText?: string;
+    layout?: {
+        highlightColor?: string;
+        highlighterBorderWidth?: number;
+        highlighterBorderRadius?: number;
+        highlighterPadding?: number;
+        overlayOpacity?: number;
+        zIndex?: number;
+    };
+    button?: {
+        primary?: {
+            background?: string;
+            text?: string;
+            borderColor?: string;
+            borderWidth?: number;
+            borderRadius?: number;
+            fontSize?: string;
+            fontWeight?: string;
+            paddingX?: string;
+            paddingY?: string;
+        };
+        secondary?: {
+            background?: string;
+            text?: string;
+            borderColor?: string;
+            borderWidth?: number;
+            borderRadius?: number;
+            fontSize?: string;
+            fontWeight?: string;
+            paddingX?: string;
+            paddingY?: string;
+        };
+    };
+    content?: {
+        title?: {
+            fontSize?: string;
+            fontWeight?: string;
+            lineHeight?: string;
+            letterSpacing?: string;
+            marginBottom?: string;
+        };
+        description?: {
+            fontSize?: string;
+            fontWeight?: string;
+            lineHeight?: string;
+            letterSpacing?: string;
+            marginBottom?: string;
+        };
+    };
+    modal?: {
+        background?: string;
+        text?: string;
+        borderColor?: string;
+        borderWidth?: number;
+        borderRadius?: number;
+        shadowColor?: string;
+        shadowBlur?: number;
+        shadowSpread?: number;
+        paddingX?: string;
+        paddingY?: string;
+        width?: string;
+        gap?: string;
+    };
+    progress?: {
+        enabled?: boolean;
+        fontSize?: string;
+        fontWeight?: string;
+        opacity?: number;
+    };
+    arrow?: {
+        enabled?: boolean;
+        size?: number;
+    };
 }
 
 export interface SpotlightControls {
@@ -38,4 +103,6 @@ export interface SpotlightControls {
     setBorderRadius: (radius: number) => void;
     setHighlightColor: (color: string) => void;
     setHighlightStrokeWidth: (width: number) => void;
+    setPrimaryButtonColor: (color: string) => void;
+    setSecondaryButtonColor: (color: string) => void;
 }
