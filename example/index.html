@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.png" />
+  <title>Spotlight JS — Interactive Tour Engine</title>
+  <link rel="stylesheet" href="http://localhost:3000/styles/spotlight.css" />
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">v2.0.0 • TypeScript Native</div>
+      <!-- Spotlight #1; Welcome to Spotlight JS; Spotlight JS directs your user's attention seamlessly with a sleek, framework-agnostic tour engine. -->
+      <h1>Spotlight JS</h1>
+      <p class="subtitle">A minimalist, lightweight onboarding engine designed for high-end web platforms and modern web
+        applications.</p>
+
+      <div class="cta-group">
+        <button type="spotlight-button:start">Start Interactive Tour</button>
+        <a href="https://github.com/cttricks/spotlight.js" target="_blank" style="text-decoration: none;">
+          <button class="secondary">GitHub Repo</button>
+        </a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Spotlight #2; Zero External Dependencies; Crafted with pure native TypeScript. No bulky dependencies, ensuring lightning fast page loads. -->
+      <div class="card">
+        <h3>Zero Dependencies</h3>
+        <p>Built completely ground-up with clean TypeScript to maintain lightweight bundles and maximum performance.</p>
+      </div>
+
+      <!-- Spotlight #3; Deep Customization; Control everything from themes, border radius, animations, overlay opacities to button text. -->
+      <div class="card">
+        <h3>Deeply Customizable</h3>
+        <p>Adapt every visual aspect: light/dark themes, custom radius, custom highlight strokes, and custom labels.</p>
+      </div>
+
+      <!-- Spotlight #4; Framework Agnostic; Seamlessly integrate into React, Next.js, Vue, Astro, Vite, or simple HTML. -->
+      <div class="card">
+        <h3>Universal Compatibility</h3>
+        <p>Runs everywhere—from single static HTML files via CDN to enterprise-grade Next.js/React applications.</p>
+      </div>
+    </div>
+
+    <!-- Spotlight #5; Live Customization Playground; Change settings in real time to customize the look and feel of your tour. -->
+    <div class="playground">
+      <h2>Live Configurator</h2>
+      <div class="controls-grid">
+        <div class="control-item">
+          <label>Theme</label>
+          <select id="theme-select">
+            <option value="dark" selected>Dark Mode</option>
+            <option value="light">Light Mode</option>
+          </select>
+        </div>
+
+        <div class="control-item">
+          <label>Border Radius (px)</label>
+          <input type="number" id="radius-input" value="8" min="0" max="20" />
+        </div>
+
+        <div class="control-item">
+          <label>Highlight Color</label>
+          <input type="color" id="color-input" value="#ffffff" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { spotlight } from 'http://localhost:3000/index.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      let tour = await spotlight({
+        theme: 'dark',
+        borderRadius: 8,
+        highlightColor: '#ffffff',
+        devMode: true
+      });
+
+      // Live updates
+      document.getElementById('theme-select').addEventListener('change', (e) => {
+        tour.setTheme(e.target.value);
+      });
+
+      document.getElementById('radius-input').addEventListener('input', (e) => {
+        tour.setBorderRadius(parseInt(e.target.value) || 0);
+      });
+
+      document.getElementById('color-input').addEventListener('input', (e) => {
+        tour.setHighlightColor(e.target.value);
+      });
+    });
+  </script>
+</body>
+
+</html>

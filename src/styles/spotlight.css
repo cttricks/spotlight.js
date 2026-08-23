@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+  --sl-theme: light;
+  --sl-border-radius: 4px;
+  --sl-modal-padding: 15px;
+  --sl-modal-width: 300px;
+  --sl-highlight-color: #ffce5c;
+  --sl-highlight-stroke-width: 3px;
+  --sl-animation-duration: 300ms;
+  
+  /* Theme colors */
+  --sl-bg-light: #fcfcfc;
+  --sl-bg-dark: #2d2d2d;
+  --sl-text-light: #2d2d2d;
+  --sl-text-dark: #fcfcfc;
+  --sl-shadow-light: 4px 10px 20px #666;
+  --sl-shadow-dark: 4px 10px 20px #ffffff33;
+}
+
+/* Apply theme based on --sl-theme */
+.sl-model {
+  position: absolute;
+  padding: var(--sl-modal-padding);
+  min-width: 250px;
+  max-width: var(--sl-modal-width);
+  border-radius: var(--sl-border-radius);
+  z-index: 9999;
+  font-family: "Poppins", sans-serif;
+  cursor: default;
+  box-shadow: var(--sl-shadow-light);
+  background: var(--sl-bg-light);
+  color: var(--sl-text-light);
+  transition: background var(--sl-animation-duration), color var(--sl-animation-duration), box-shadow var(--sl-animation-duration);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .sl-model,
+.sl-model[data-theme="dark"],
+html[data-theme="dark"] .sl-model {
+  box-shadow: var(--sl-shadow-dark);
+  background: var(--sl-bg-dark);
+  color: var(--sl-text-dark);
+}
+
+.sl-model:before {
+  content: '';
+  height: 16px;
+  width: 16px;
+  background: var(--sl-bg-light);
+  position: absolute;
+  top: -6px;
+  left: 8px;
+  border-radius: var(--sl-border-radius);
+  z-index: 0;
+  transform: rotate(45deg);
+  transition: background var(--sl-animation-duration);
+}
+
+/* Dark theme for the arrow */
+[data-theme="dark"] .sl-model:before,
+.sl-model[data-theme="dark"]:before,
+html[data-theme="dark"] .sl-model:before {
+  background: var(--sl-bg-dark);
+}
+
+.sl-title {
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  position: relative;
+  line-height: 1.5;
+  zoom: 1;
+}
+
+.sl-description {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  zoom: 1;
+}
+
+.sl-control-panel {
+  width: 100%;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto 65px;
+  gap: 8px;
+}
+
+.sl-footer {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: auto 70px 50px;
+  gap: 5px;
+}
+
+.sl-spot {
+  margin: auto 0;
+  font-size: 13px;
+  font-weight: 400;
+  zoom: 1;
+  opacity: .7;
+}
+
+.sl-button {
+  border: 1px solid;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 3px 0;
+  border-radius: var(--sl-border-radius);
+  color: inherit;
+  opacity: .8;
+  cursor: pointer;
+  background-color: inherit;
+  border-color: #ccc;
+  transition: opacity var(--sl-animation-duration);
+}
+
+.sl-button:hover {
+  opacity: 1;
+}
+
+.sl-button.hidden {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+.sl-button.done {
+  background-color: #2196F3;
+  color: #fff;
+  border-color: #2196F3;
+}
+
+/* Highlight stroke color - set via JavaScript */
+#spotlight-cover rect[stroke] {
+  stroke: var(--sl-highlight-color);
+  stroke-width: var(--sl-highlight-stroke-width);
+}
+
+/* Overlay color - set via JavaScript */
+#spotlight-cover rect[type="spotlight-button:exit"] {
+  fill: rgba(0, 0, 0, 0.5);
+}

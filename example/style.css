@@ -1,0 +1,186 @@
+:root {
+    --bg: #000000;
+    --card-bg: #0a0a0a;
+    --card-border: #222222;
+    --text: #ffffff;
+    --text-muted: #888888;
+    --accent: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Vercel-like Header */
+header {
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #111;
+    border: 1px solid #333;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ccc;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p.subtitle {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+}
+
+.cta-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+button {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: #ccc;
+    transform: translateY(-1px);
+}
+
+button.secondary {
+    background: #000;
+    color: #fff;
+    border: 1px solid var(--card-border);
+}
+
+button.secondary:hover {
+    background: #111;
+    border-color: #444;
+}
+
+/* Grid Section */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    border-color: #444;
+}
+
+.card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Live Controls Section */
+.playground {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.playground h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-item label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+select,
+input {
+    background: #000;
+    border: 1px solid var(--card-border);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+select:focus,
+input:focus {
+    border-color: #666;
+}
