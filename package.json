@@ -25,6 +25,9 @@
     "prepare": "npm run build",
     "cdn": "serve dist -p 3000 --cors",
     "start": "serve example -p 3001",
+    "site:dev": "npm --prefix website run dev",
+    "site:build": "npm --prefix website run build",
+    "site:preview": "npm --prefix website run preview",
     "clean": "rimraf dist",
     "copy:assets": "node -e \"const fs = require('fs'); fs.mkdirSync('dist/styles', { recursive: true }); fs.copyFileSync('src/styles/spotlight.css', 'dist/styles/spotlight.css'); fs.copyFileSync('src/styles/spotlight.css', 'example/spotlight.css'); if (fs.existsSync('dist/index.js')) fs.copyFileSync('dist/index.js', 'example/spotlight.js');\""
   },
