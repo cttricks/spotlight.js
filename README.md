@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/cttricks/spotlight.js/master/docs/assets/img/spotlight-js-banner.png" alt="Spotlight.js" />
   <h1>Spotlight JS</h1>
-  <p>A mature, TypeScript-powered tour guide engine for any web project.</p>
+  <p>A modern, zero-dependency tour guide & onboarding engine for any web project.</p>
   <p>
     <img src="https://img.shields.io/npm/v/spotlight-js" alt="npm version" />
     <img src="https://img.shields.io/github/license/cttricks/spotlight.js" alt="license" />
@@ -10,14 +10,16 @@
 
 ---
 
-**Spotlight JS** is a robust and fully adaptable pure JavaScript/TypeScript engine designed to direct user attention across your webpage. It is zero-dependency, ensuring high performance and compatibility with all modern browsers and frameworks.
+**Spotlight JS** is a lightweight, zero-dependency site tour and feature onboarding engine written in TypeScript. It guides user attention across your web application with fluid SVG cutout morphing, modern glassmorphic card popovers, rich media embeds (Images, GIFs, and Videos), and seamless Light/Dark/Auto theme adaptation.
 
-### Why Spotlight JS?
+### ✨ Highlights
 
-- 🚀 **Framework Agnostic:** Works with React, Next.js, Astro, Vite, Vue, or simple HTML/CSS/JS.
-- 🎨 **Fully Themeable:** Built-in Light/Dark modes and deep customization via configuration.
-- 🏗️ **Modern Architecture:** Rewritten from the ground up in TypeScript for 2.0.0.
-- 🪄 **Zero Config Mode:** Automatic start with "Magical Attributes".
+- 🏷️ **Declarative Markup:** Annotate elements directly using `data-spot-name`, `data-spot-summary`, `data-spot-media`, and `data-spot-id`.
+- 🌊 **Fluid Motion & Morphing:** Smooth hardware-accelerated transitions glide the cutout between elements of any size.
+- 📐 **Smart Collision Positioning:** Auto-flips (top, bottom, left, right) with boundary clamping and dynamically tethered directional arrows.
+- 🎬 **Rich Media Support:** Embed images, animated GIFs, or autoplaying looping HTML5 videos (`.mp4`, `.webm`) directly inside steps.
+- 🌗 **Adaptive Theming:** Built-in `'light'`, `'dark'`, and `'auto'` (dynamically tracks OS system color preference).
+- 🚀 **Universal Compatibility:** Zero dependencies. Works with Next.js (App & Pages router, SSR safe), React, Vite, Vue, Astro, and plain HTML via CDN.
 
 ---
 
@@ -25,42 +27,102 @@
 
 ```bash
 npm install spotlight-js
+# or
+pnpm add spotlight-js
+# or
+yarn add spotlight-js
 ```
 
-Or use via CDN:
+### Or via CDN (Instant / No Build)
+
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spotlight-js/src/spotlight.css" />
-<script type="module" src="https://cdn.jsdelivr.net/npm/spotlight-js/dist/index.js"></script>
+<!-- Stylesheet -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spotlight-js/dist/styles/spotlight.css" />
+
+<!-- Standalone IIFE Script -->
+<script src="https://cdn.jsdelivr.net/npm/spotlight-js/dist/spotlight.global.js"></script>
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-1. **Annotate your HTML:** Use comments to define steps.
+### 1. Annotate your HTML with `data-spot-*`
+
 ```html
-<!-- Spotlight #1; My Title; The description of this step. -->
-<button>Target Feature</button>
+<header>
+  <button 
+    data-spot-id="1"
+    data-spot-name="Instant Search"
+    data-spot-summary="Press ⌘K anytime to quickly locate pages, documents, and settings."
+    data-spot-media="/assets/search-demo.mp4"
+    data-spot-position="bottom">
+    Search (⌘K)
+  </button>
+</header>
 ```
 
-2. **Initialize:**
+### 2. Initialize in JavaScript / TypeScript
+
 ```typescript
 import { spotlight } from 'spotlight-js';
-import 'spotlight-js/stylesheet';
+import 'spotlight-js/styles';
 
 const tour = await spotlight({
-  theme: 'dark',
-  borderRadius: 8
+  theme: 'auto',              // 'light' | 'dark' | 'auto' (tracks system preference)
+  highlightColor: '#6366f1',  // Accent border and button color
+  backdropBlur: 4             // Subtle glassmorphism backdrop blur in px
 });
+
+// Launch the tour
+tour.start();
 ```
 
-For detailed setup instructions, see [How-to-use.md](./How-to-use.md).
+---
+
+## 🕹️ Controls & API
+
+```typescript
+tour.start();            // Starts tour from step 1
+tour.start({ from: 2 }); // Starts tour from a specific step ID or index
+tour.next();             // Advances to next step
+tour.previous();         // Goes back to previous step
+tour.goTo(3);            // Jumps to step index
+tour.end();              // Closes the tour
+tour.updateSpots();      // Re-scans DOM for dynamic elements
+tour.setTheme('dark');   // Switches theme dynamically ('light' | 'dark' | 'auto')
+tour.destroy();          // Unbinds listeners and removes DOM artifacts
+
+// Event Listeners
+tour.on('start', ({ step, total }) => { ... });
+tour.on('change', ({ step, index, total }) => { ... });
+tour.on('next', ({ step, index }) => { ... });
+tour.on('complete', () => { ... });
+tour.on('exit', ({ reason }) => { ... });
+```
+
+### Declarative Button Triggers
+Any HTML element with `type="spotlight-button:start"` or `data-spotlight-start` will automatically launch the tour when clicked:
+
+```html
+<button data-spotlight-start>Take a Tour</button>
+```
+
+---
+
+## 📚 Documentation
+
+Detailed specifications and integration guides are available in [`docs/`](./docs):
+- 📐 [**Architecture Specification**](./docs/architecture.md) — System design, lifecycle state machine, and SSR safety.
+- 🏷️ [**Data Attributes Specification**](./docs/data-attributes-spec.md) — Reference for all `data-spot-*` attributes.
+- 🎨 [**UI, Animation & Theme Design**](./docs/ui-animation-design.md) — Morphing cutout mechanics and CSS tokens.
+- 🚀 [**Framework & CDN Integration Guide**](./docs/framework-cdn-guide.md) — Recipes for Next.js, React, Vue, and CDN.
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see [Contribution.md](./Contribution.md) for guidelines and roadmap.
+We welcome contributions! Please see [Contribution.md](./Contribution.md) for development setup and guidelines.
 
 ---
 

@@ -1,27 +1,32 @@
 {
   "name": "spotlight-js",
-  "version": "2.0.0",
-  "description": "Spotlight JS - A robust, efficient, and fully adaptable pure JavaScript/TypeScript engine designed to direct user attention across your webpage",
-  "main": "./dist/index.js",
+  "version": "2.1.0",
+  "description": "Spotlight JS - A smooth, modern, and zero-dependency site tour engine with declarative data-spot attributes, rich media, and adaptive themes.",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "unpkg": "./dist/spotlight.min.js",
+  "jsdelivr": "./dist/spotlight.min.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "require": "./dist/index.cjs"
     },
-    "./stylesheet": "./src/spotlight.css"
+    "./styles": "./dist/styles/spotlight.css",
+    "./stylesheet": "./dist/styles/spotlight.css",
+    "./styles/spotlight.css": "./dist/styles/spotlight.css"
   },
   "directories": {
     "doc": "docs"
   },
-"scripts": {
-    "build": "tsc && npm run copy:css",
+  "scripts": {
+    "build": "tsup && npm run copy:assets",
     "prepare": "npm run build",
     "cdn": "serve dist -p 3000 --cors",
     "start": "serve example -p 3001",
     "clean": "rimraf dist",
-    "copy:css": "powershell -Command \"New-Item -ItemType Directory -Force -Path dist\\styles; Copy-Item -Path src\\styles\\spotlight.css -Destination dist\\styles\\spotlight.css -Force\""
+    "copy:assets": "node -e \"const fs = require('fs'); fs.mkdirSync('dist/styles', { recursive: true }); fs.copyFileSync('src/styles/spotlight.css', 'dist/styles/spotlight.css'); fs.copyFileSync('src/styles/spotlight.css', 'example/spotlight.css'); if (fs.existsSync('dist/index.js')) fs.copyFileSync('dist/index.js', 'example/spotlight.js');\""
   },
   "repository": {
     "type": "git",
@@ -33,7 +38,10 @@
     "tour",
     "guide",
     "onboarding",
-    "typescript"
+    "product-tour",
+    "walkthrough",
+    "typescript",
+    "zero-dependency"
   ],
   "author": "Tanish Raj <help.cttricks@gmail.com>",
   "contributors": [
@@ -48,10 +56,10 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "typescript": "^5.5.0",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.5.0"
   },
-  "peerDependencies": {},
   "files": [
     "dist/**/*",
     "src/**/*.css",

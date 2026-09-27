@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/favicon.png" />
   <title>Spotlight JS — Interactive Tour Engine</title>
-  <link rel="stylesheet" href="http://localhost:3000/styles/spotlight.css" />
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="./spotlight.css" />
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -18,9 +18,14 @@
         <img src="/spotlight.png" height="200px" width="200px" />
         <div class="spotlight-bulb"></div>
       </div>
-      <div class="badge">v2.0.0 • TypeScript Native</div>
-      <!-- Spotlight #1; Welcome to Spotlight JS; Spotlight JS directs your user's attention seamlessly with a sleek, framework-agnostic tour engine. -->
-      <h1>Spotlight JS</h1>
+      <div class="badge">v2.1.0 • TypeScript Native</div>
+      
+      <h1 
+        data-spot-id="1" 
+        data-spot-name="Welcome to Spotlight JS" 
+        data-spot-summary="Spotlight JS is a sleek, zero-dependency onboarding engine that guides user attention with fluid animations, adaptive theming, and rich media."
+        data-spot-media="/spotlight.png"
+        data-spot-position="bottom">Spotlight JS</h1>
       <p class="subtitle">A minimalist, lightweight onboarding engine designed for high-end web platforms and modern web
         applications.</p>
 
@@ -33,27 +38,44 @@
     </header>
 
     <div class="grid">
-      <!-- Spotlight #2; Zero External Dependencies; Crafted with pure native TypeScript. No bulky dependencies, ensuring lightning fast page loads. -->
-      <div class="card">
+      <div 
+        class="card"
+        data-spot-id="2"
+        data-spot-name="Zero External Dependencies"
+        data-spot-summary="Crafted with pure native TypeScript and CSS. Zero heavy third-party dependencies, keeping your bundle lean and lightning fast."
+        data-spot-position="top">
         <h3>Zero Dependencies</h3>
         <p>Built completely ground-up with clean TypeScript to maintain lightweight bundles and maximum performance.</p>
       </div>
 
-      <!-- Spotlight #3; Deep Customization; Control everything from themes, border radius, animations, overlay opacities to button text. -->
-      <div class="card">
-        <h3>Deeply Customizable</h3>
-        <p>Adapt every visual aspect: light/dark themes, custom radius, custom highlight strokes, and custom labels.</p>
+      <div 
+        class="card"
+        data-spot-id="3"
+        data-spot-name="Declarative Attributes"
+        data-spot-summary="Target any element effortlessly using <code>data-spot-name</code>, <code>data-spot-summary</code>, and <code>data-spot-media</code> (images, GIFs, or videos)."
+        data-spot-position="top">
+        <h3>Declarative Attributes</h3>
+        <p>No complex selectors or fragile comments needed! Simply decorate your HTML elements with <code>data-spot-*</code> attributes.</p>
       </div>
 
-      <!-- Spotlight #4; Framework Agnostic; Seamlessly integrate into React, Next.js, Vue, Astro, Vite, or simple HTML. -->
-      <div class="card">
-        <h3>Universal Compatibility</h3>
+      <div 
+        class="card"
+        data-spot-id="4"
+        data-spot-name="Adaptive Theming & Fluid Motion"
+        data-spot-summary="Enjoy silky smooth SVG cutout morphing, modern glassmorphic card design, and auto system theme adaptation."
+        data-spot-position="top">
+        <h3>Adaptive & Fluid</h3>
         <p>Runs everywhere—from single static HTML files via CDN to enterprise-grade Next.js/React applications.</p>
       </div>
     </div>
 
     <!-- Live Customization Playground -->
-    <div class="playground">
+    <div 
+      class="playground"
+      data-spot-id="5"
+      data-spot-name="Live Configurator"
+      data-spot-summary="Customize themes, colors, border radiuses, and test your options live right here."
+      data-spot-position="top">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2>Live Configurator</h2>
         <button type="spotlight-button:start">Test Config</button>
@@ -285,10 +307,10 @@
   </div>
 
   <script type="module">
-    import { spotlight } from 'http://localhost:3000/index.js';
-    import { highlight } from '/json-syntax.js';
+    import { highlight } from './json-syntax.js';
+    import { spotlight } from './spotlight.js';
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    async function init() {
       // Navigation tab functionality
       const navButtons = document.querySelectorAll('.playground-nav-btn');
       const configGroups = document.querySelectorAll('.config-group');
@@ -405,7 +427,9 @@
           if (isNumber) val = parseFloat(val) || 0;
           if (isBool) val = e.target.value === 'true';
           obj[key] = val;
-          tour = spotlight(config); // re-init or apply live
+          if (tour && tour.applyOptions) {
+            tour.applyOptions(config);
+          }
           updateJSON();
         });
         if (el.tagName === 'SELECT') {
@@ -413,7 +437,9 @@
             let val = e.target.value;
             if (isBool) val = e.target.value === 'true';
             obj[key] = val;
-            tour = spotlight(config);
+            if (tour && tour.applyOptions) {
+              tour.applyOptions(config);
+            }
             updateJSON();
           });
         }
@@ -422,7 +448,9 @@
       // Theme
       document.getElementById('theme-select').addEventListener('change', (e) => {
         config.theme = e.target.value;
-        tour.setTheme(config.theme);
+        if (tour) {
+          tour.setTheme(config.theme);
+        }
         document.documentElement.setAttribute('data-page-theme', config.theme);
         updateJSON();
       });
@@ -502,7 +530,21 @@
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = originalText, 2000);
       });
-    });
+
+      // Explicitly wire start buttons
+      document.querySelectorAll('[type="spotlight-button:start"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          tour.start();
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   </script>
 </body>
 

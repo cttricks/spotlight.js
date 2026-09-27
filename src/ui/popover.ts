@@ -1,144 +1,325 @@
-import { Spot } from '../types/spotlight.types.js';
+import { SpotStep, SpotlightOptions } from '../types/spotlight.types.js';
+import { computePopoverPosition } from '../core/positioner.js';
 
-let popover: HTMLDivElement;
-let banner: HTMLDivElement;
-let title: HTMLDivElement;
-let description: HTMLDivElement;
-let message: HTMLDivElement;
-let btnPrevious: HTMLButtonElement;
-let btnNext: HTMLButtonElement;
+const videoPattern = /\.(mp4|webm|ogg|m4v)(\?.*)?$/i;
 
-function createPopover() {
-    if (document.querySelector('.sl-model')) return;
+export interface PopoverCallbacks {
+  onNext: () => void;
+  onPrevious: () => void;
+  onExit: () => void;
+  onSkip?: () => void;
+}
 
-    popover = document.createElement('div');
-    popover.classList.add('sl-model');
-    popover.style.display = 'none';
+export class PopoverManager {
+  private el: HTMLElement | null = null;
+  private arrowEl: HTMLElement | null = null;
+  private headerEl: HTMLElement | null = null;
+  private titleEl: HTMLElement | null = null;
+  private closeBtn: HTMLButtonElement | null = null;
+  private mediaContainer: HTMLElement | null = null;
+  private summaryEl: HTMLElement | null = null;
+  private progressEl: HTMLElement | null = null;
+  private prevBtn: HTMLButtonElement | null = null;
+  private nextBtn: HTMLButtonElement | null = null;
+  private skipBtn: HTMLButtonElement | null = null;
+  private callbacks: PopoverCallbacks | null = null;
+  private currentStep: SpotStep | null = null;
+  private options: SpotlightOptions = {};
 
-    banner = document.createElement('div');
-    banner.setAttribute('type', 'spotlight-banner');
-    banner.classList.add('sl-banner');
+  mount(parent: HTMLElement, options: SpotlightOptions, callbacks: PopoverCallbacks): void {
+    if (this.el) return;
+    this.options = options;
+    this.callbacks = callbacks;
 
-    title = document.createElement('div');
-    title.setAttribute('type', 'spotlight-title');
-    title.classList.add('sl-title');
+    const popover = document.createElement('div');
+    popover.className = 'sl-popover';
+    popover.setAttribute('role', 'dialog');
+    popover.setAttribute('aria-modal', 'true');
+    popover.setAttribute('aria-labelledby', 'sl-popover-title');
+    popover.setAttribute('tabindex', '-1');
 
-    description = document.createElement('div');
-    description.setAttribute('type', 'spotlight-desc');
-    description.classList.add('sl-description');
+    // Arrow
+    const arrow = document.createElement('div');
+    arrow.className = 'sl-popover-arrow';
+    popover.appendChild(arrow);
 
+    // Header
+    const header = document.createElement('div');
+    header.className = 'sl-popover-header';
+
+    const title = document.createElement('h3');
+    title.id = 'sl-popover-title';
+    title.className = 'sl-popover-title';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'sl-popover-close-btn';
+    closeBtn.setAttribute('aria-label', 'Close tour');
+    closeBtn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    `;
+
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+    popover.appendChild(header);
+
+    // Media Container
+    const mediaContainer = document.createElement('div');
+    mediaContainer.className = 'sl-popover-media';
+    popover.appendChild(mediaContainer);
+
+    // Body / Summary
+    const summary = document.createElement('div');
+    summary.className = 'sl-popover-summary';
+    popover.appendChild(summary);
+
+    // Footer
     const footer = document.createElement('div');
-    footer.classList.add('sl-footer');
+    footer.className = 'sl-popover-footer';
 
-    message = document.createElement('div');
-    message.setAttribute('type', 'spotlight-steps');
-    message.classList.add('sl-spot');
+    const progress = document.createElement('div');
+    progress.className = 'sl-popover-progress';
 
-    btnPrevious = document.createElement('button');
-    btnPrevious.setAttribute('type', 'spotlight-button:previous');
-    btnPrevious.classList.add('sl-button');
-    btnPrevious.textContent = 'Previous';
+    const actions = document.createElement('div');
+    actions.className = 'sl-popover-actions';
 
-    btnNext = document.createElement('button');
-    btnNext.setAttribute('type', 'spotlight-button:next');
-    btnNext.classList.add('sl-button');
-    btnNext.textContent = 'Next';
+    const skipBtn = document.createElement('button');
+    skipBtn.className = 'sl-btn sl-btn-secondary sl-btn-skip';
+    skipBtn.textContent = options.skipText || 'Skip';
 
-    footer.appendChild(message);
-    footer.appendChild(btnPrevious);
-    footer.appendChild(btnNext);
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'sl-btn sl-btn-secondary sl-btn-prev';
+    prevBtn.textContent = options.previousText || 'Back';
 
-    popover.appendChild(banner);
-    popover.appendChild(title);
-    popover.appendChild(description);
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'sl-btn sl-btn-primary sl-btn-next';
+    nextBtn.textContent = options.nextText || 'Next';
+
+    actions.appendChild(skipBtn);
+    actions.appendChild(prevBtn);
+    actions.appendChild(nextBtn);
+
+    footer.appendChild(progress);
+    footer.appendChild(actions);
     popover.appendChild(footer);
-    document.body.appendChild(popover);
-}
 
-export function displayPopover(type: boolean): void {
-    createPopover();
-    popover.style.display = type ? 'block' : 'none';
-}
+    parent.appendChild(popover);
 
-export function showPopover(position: DOMRect, spot: Spot, index: number, totalComments: number, options: any): void {
-    createPopover();
+    // Event listeners
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.callbacks?.onExit();
+    });
 
-    // Update content
-    banner.innerHTML = spot.image ? `<img src="${spot.image}" style="width: 100%; border-radius: ${options.borderRadius}px; margin-bottom: 12px; pointer-events: none;">` : '';
-    title.innerHTML = spot.title;
-    description.innerHTML = spot.description;
+    skipBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.callbacks?.onSkip) {
+        this.callbacks.onSkip();
+      } else {
+        this.callbacks?.onExit();
+      }
+    });
 
-    // Update footer
-    message.textContent = `${index + 1} of ${totalComments}`;
-    btnPrevious.classList.toggle('hidden', index < 1);
-    btnPrevious.textContent = options.previousText || 'Previous';
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.callbacks?.onPrevious();
+    });
 
-    if ((index + 1) === totalComments || index < 1) {
-        btnNext.classList.add('done');
-        btnNext.textContent = index < 1 ? 'Start' : options.doneText || 'Done';
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.callbacks?.onNext();
+    });
+
+    this.el = popover;
+    this.arrowEl = arrow;
+    this.headerEl = header;
+    this.titleEl = title;
+    this.closeBtn = closeBtn;
+    this.mediaContainer = mediaContainer;
+    this.summaryEl = summary;
+    this.progressEl = progress;
+    this.prevBtn = prevBtn;
+    this.nextBtn = nextBtn;
+    this.skipBtn = skipBtn;
+  }
+
+  show(): void {
+    if (!this.el) return;
+    this.el.classList.add('sl-visible');
+    // Set focus to the next button for keyboard accessibility
+    setTimeout(() => {
+      this.nextBtn?.focus();
+    }, 50);
+  }
+
+  hide(): void {
+    if (!this.el) return;
+    this.el.classList.remove('sl-visible');
+  }
+
+  renderStep(step: SpotStep, index: number, total: number): void {
+    if (!this.el || !this.titleEl || !this.summaryEl || !this.progressEl || !this.nextBtn || !this.prevBtn) {
+      return;
+    }
+    this.currentStep = step;
+
+    // Title
+    if (step.title) {
+      this.titleEl.textContent = step.title;
+      this.titleEl.style.display = 'block';
     } else {
-        btnNext.classList.remove('done');
-        btnNext.textContent = options.nextText || 'Next';
+      this.titleEl.style.display = 'none';
     }
 
-    // Position popover
-    const padding = 20;
-    popover.style.top = `${position.top + position.height + padding + document.documentElement.scrollTop}px`;
-    popover.style.left = `${position.left + document.documentElement.scrollLeft}px`;
-
-    // Show popover
-    popover.style.display = 'block';
-}
-
-export function setPopoverStyles(options: any): void {
-    createPopover();
-    popover.style.borderRadius = `${options.modal?.borderRadius || 4}px`;
-    popover.style.padding = `${options.modal?.paddingY || 15}px ${options.modal?.paddingX || 15}px`;
-    popover.style.maxWidth = `${options.modal?.width || 300}px`;
-    popover.style.transition = `all ${options.animationDuration || 300}ms ease`;
-    popover.style.backgroundColor = options.modal?.background || '#fcfcfc';
-    popover.style.color = options.modal?.text || '#2d2d2d';
-    popover.style.border = `${options.modal?.borderWidth || 0}px solid ${options.modal?.borderColor || 'transparent'}`;
-    popover.style.boxShadow = `4px 10px ${options.modal?.shadowBlur || 20}px ${options.modal?.shadowColor || 'rgba(0, 0, 0, 0.2)'}`;
-    popover.style.gap = `${options.modal?.gap || 16}px`;
-
-    if (options.shadowColor) {
-        popover.style.boxShadow = `4px 10px ${options.modal?.shadowBlur || 20}px ${options.shadowColor}`;
+    // Summary
+    if (step.summary) {
+      this.summaryEl.innerHTML = step.summary;
+      this.summaryEl.style.display = 'block';
+    } else {
+      this.summaryEl.style.display = 'none';
     }
 
-    if (options.content?.title) {
-        Object.assign(title.style, {
-            fontSize: options.content.title.fontSize || '20px',
-            fontWeight: options.content.title.fontWeight || '600',
-            lineHeight: options.content.title.lineHeight || '1.5',
-            letterSpacing: options.content.title.letterSpacing || '0px',
-            marginBottom: options.content.title.marginBottom || '0px'
-        });
+    // Media
+    this.renderMedia(step.media);
+
+    // Progress
+    if (this.options.showProgress !== false) {
+      this.progressEl.textContent = `${index + 1} of ${total}`;
+      this.progressEl.style.display = 'block';
+    } else {
+      this.progressEl.style.display = 'none';
     }
 
-    if (options.content?.description) {
-        Object.assign(description.style, {
-            fontSize: options.content.description.fontSize || '14px',
-            fontWeight: options.content.description.fontWeight || '400',
-            lineHeight: options.content.description.lineHeight || '1.5',
-            letterSpacing: options.content.description.letterSpacing || '0px',
-            marginBottom: options.content.description.marginBottom || '0px'
-        });
+    // Buttons
+    const isFirst = index === 0;
+    const isLast = index === total - 1;
+
+    // Previous Button
+    if (isFirst) {
+      this.prevBtn.style.display = 'none';
+    } else {
+      this.prevBtn.style.display = 'inline-flex';
+      this.prevBtn.textContent = this.options.previousText || 'Back';
     }
 
-    if (options.progress) {
-        message.style.display = options.progress.enabled ? 'block' : 'none';
-        message.style.fontSize = options.progress.fontSize || '13px';
-        message.style.fontWeight = options.progress.fontWeight || '400';
-        message.style.opacity = options.progress.opacity?.toString() || '0.7';
+    // Next / Finish Button
+    if (isLast) {
+      this.nextBtn.textContent = this.options.doneText || 'Finish';
+      this.nextBtn.classList.add('sl-btn-done');
+    } else {
+      this.nextBtn.textContent = this.options.nextText || 'Next';
+      this.nextBtn.classList.remove('sl-btn-done');
     }
 
-    if (options.arrow) {
-        const arrow = popover.querySelector(':before') as HTMLElement;
-        if (arrow) {
-            arrow.style.display = options.arrow.enabled ? 'block' : 'none';
-            arrow.style.height = `${options.arrow.size || 16}px`;
-            arrow.style.width = `${options.arrow.size || 16}px`;
+    // Skip button visibility
+    if (this.skipBtn) {
+      this.skipBtn.style.display = isLast ? 'none' : 'inline-flex';
+    }
+  }
+
+  private renderMedia(mediaUrl?: string): void {
+    if (!this.mediaContainer) return;
+    this.mediaContainer.innerHTML = '';
+
+    if (!mediaUrl || mediaUrl.trim() === '') {
+      this.mediaContainer.style.display = 'none';
+      return;
+    }
+
+    this.mediaContainer.style.display = 'block';
+
+    if (videoPattern.test(mediaUrl)) {
+      const video = document.createElement('video');
+      video.className = 'sl-popover-media-video';
+      video.src = mediaUrl;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.setAttribute('controlsList', 'nodownload');
+
+      video.addEventListener('loadeddata', () => {
+        // Recompute position after video metadata load to prevent layout shifts
+        if (this.currentStep?.element) {
+          this.positionAt(this.currentStep.element.getBoundingClientRect(), this.currentStep.position);
         }
+      });
+
+      this.mediaContainer.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.className = 'sl-popover-media-img';
+      img.src = mediaUrl;
+      img.alt = this.currentStep?.title || 'Spotlight Step Preview';
+      img.loading = 'lazy';
+
+      img.addEventListener('load', () => {
+        // Recompute position after image load to prevent layout shifts
+        if (this.currentStep?.element) {
+          this.positionAt(this.currentStep.element.getBoundingClientRect(), this.currentStep.position);
+        }
+      });
+
+      this.mediaContainer.appendChild(img);
     }
+  }
+
+  positionAt(targetRect: DOMRect, preferredPosition: any = 'auto'): void {
+    if (!this.el) return;
+
+    // Make popover temporarily visible to measure dimensions if hidden
+    const wasHidden = !this.el.classList.contains('sl-visible');
+    if (wasHidden) {
+      this.el.style.visibility = 'hidden';
+      this.el.style.display = 'block';
+    }
+
+    const popoverRect = this.el.getBoundingClientRect();
+    const result = computePopoverPosition(
+      targetRect,
+      popoverRect.width || 320,
+      popoverRect.height || 180,
+      preferredPosition || 'auto'
+    );
+
+    this.el.style.top = `${result.top}px`;
+    this.el.style.left = `${result.left}px`;
+    this.el.setAttribute('data-placement', result.placement);
+
+    if (this.arrowEl) {
+      if (result.placement === 'top' || result.placement === 'bottom') {
+        this.arrowEl.style.left = `${result.arrowOffsetPx}px`;
+        this.arrowEl.style.top = '';
+      } else {
+        this.arrowEl.style.top = `${result.arrowOffsetPx}px`;
+        this.arrowEl.style.left = '';
+      }
+    }
+
+    if (wasHidden) {
+      this.el.style.visibility = '';
+      this.el.style.display = '';
+    }
+  }
+
+  destroy(): void {
+    if (this.el && this.el.parentNode) {
+      this.el.parentNode.removeChild(this.el);
+    }
+    this.el = null;
+    this.arrowEl = null;
+    this.headerEl = null;
+    this.titleEl = null;
+    this.closeBtn = null;
+    this.mediaContainer = null;
+    this.summaryEl = null;
+    this.progressEl = null;
+    this.prevBtn = null;
+    this.nextBtn = null;
+    this.skipBtn = null;
+    this.callbacks = null;
+    this.currentStep = null;
+  }
 }

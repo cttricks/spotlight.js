@@ -1,96 +1,171 @@
-let svg = document.getElementById('spotlight-cover') as unknown as SVGSVGElement;
-let rectOverlay: SVGRectElement;
-let rectSpotlight: SVGRectElement;
-let rectBorder: SVGRectElement;
+export class OverlayManager {
+  private container: HTMLElement | null = null;
+  private svg: SVGSVGElement | null = null;
+  private maskRectCutout: SVGRectElement | null = null;
+  private borderRect: SVGRectElement | null = null;
+  private backdropRect: SVGRectElement | null = null;
+  private isVisible: boolean = false;
+  private maskId: string;
+  private onBackdropClick?: () => void;
 
-function createOverlay() {
-    if (document.getElementById('spotlight-cover')) return;
+  constructor(maskId: string = 'spotlight-mask-' + Math.random().toString(36).slice(2, 8)) {
+    this.maskId = maskId;
+  }
 
-    const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    newSvg.setAttribute("id", "spotlight-cover");
-    newSvg.setAttribute("width", "100vw");
-    newSvg.setAttribute("height", "100vh");
-    newSvg.setAttribute("style", "position:fixed;top:0;left:0;z-index:9998;display:none;pointer-events:none;");
-    
-    const mask = document.createElementNS("http://www.w3.org/2000/svg", "mask");
-    mask.setAttribute("id", "clipped-region");
+  mount(parent: HTMLElement, onBackdropClick?: () => void): void {
+    if (this.svg) return;
+    this.onBackdropClick = onBackdropClick;
 
-    const rectWhite = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rectWhite.setAttribute("width", "100%");
-    rectWhite.setAttribute("height", "100%");
-    rectWhite.setAttribute("fill", "#fff");
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('class', 'sl-overlay-svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('aria-hidden', 'true');
 
-    rectSpotlight = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rectSpotlight.setAttribute("id", "spotlight-rect");
-    rectSpotlight.setAttribute("rx", "4"); // Default radius
-    
-    mask.appendChild(rectWhite);
-    mask.appendChild(rectSpotlight);
+    // Defs & Mask
+    const defs = document.createElementNS(ns, 'defs');
+    const mask = document.createElementNS(ns, 'mask');
+    mask.setAttribute('id', this.maskId);
 
-    rectOverlay = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rectOverlay.setAttribute("type", "spotlight-button:exit");
-    rectOverlay.setAttribute("width", "100%");
-    rectOverlay.setAttribute("height", "100%");
-    rectOverlay.setAttribute("fill", "rgba(0, 0, 0, 0.5)");
-    rectOverlay.setAttribute("mask", "url(#clipped-region)");
-    rectOverlay.setAttribute("style", "pointer-events: auto;");
+    // Full white rect (opaque area of mask)
+    const maskWhite = document.createElementNS(ns, 'rect');
+    maskWhite.setAttribute('x', '0');
+    maskWhite.setAttribute('y', '0');
+    maskWhite.setAttribute('width', '100%');
+    maskWhite.setAttribute('height', '100%');
+    maskWhite.setAttribute('fill', '#ffffff');
 
-    rectBorder = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rectBorder.setAttribute("fill", "none");
-    rectBorder.setAttribute("stroke", "#ffce5c");
-    rectBorder.setAttribute("stroke-width", "3");
-    rectBorder.setAttribute("rx", "4");
+    // Cutout rect (transparent hole in mask)
+    const cutout = document.createElementNS(ns, 'rect');
+    cutout.setAttribute('class', 'sl-cutout-rect');
+    cutout.setAttribute('x', '0');
+    cutout.setAttribute('y', '0');
+    cutout.setAttribute('width', '0');
+    cutout.setAttribute('height', '0');
+    cutout.setAttribute('rx', '8');
+    cutout.setAttribute('fill', '#000000');
 
-    newSvg.appendChild(mask);
-    newSvg.appendChild(rectOverlay);
-    newSvg.appendChild(rectBorder);
-    document.body.appendChild(newSvg);
-    svg = newSvg;
-}
+    mask.appendChild(maskWhite);
+    mask.appendChild(cutout);
+    defs.appendChild(mask);
+    svg.appendChild(defs);
 
-export function displayCover(type: boolean): void {
-    createOverlay();
-    svg.style.display = type ? 'block' : 'none';
-}
+    // Backdrop Rect (dark overlay with cutout applied)
+    const backdrop = document.createElementNS(ns, 'rect');
+    backdrop.setAttribute('class', 'sl-backdrop-rect');
+    backdrop.setAttribute('x', '0');
+    backdrop.setAttribute('y', '0');
+    backdrop.setAttribute('width', '100%');
+    backdrop.setAttribute('height', '100%');
+    backdrop.setAttribute('mask', `url(#${this.maskId})`);
 
-export function setCoverBg(color: string): void {
-    createOverlay();
-    rectOverlay.setAttribute('fill', color);
-}
+    // Border Rect (highlighter stroke around cutout)
+    const border = document.createElementNS(ns, 'rect');
+    border.setAttribute('class', 'sl-border-rect');
+    border.setAttribute('x', '0');
+    border.setAttribute('y', '0');
+    border.setAttribute('width', '0');
+    border.setAttribute('height', '0');
+    border.setAttribute('rx', '8');
 
-export function setStroke(color: string): void {
-    createOverlay();
-    rectBorder.setAttribute("stroke", color);
-}
+    svg.appendChild(backdrop);
+    svg.appendChild(border);
 
-export function setStrokeWidth(width: number): void {
-    createOverlay();
-    rectBorder.setAttribute("stroke-width", width.toString());
-}
+    // Backdrop click handler
+    backdrop.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.onBackdropClick) {
+        this.onBackdropClick();
+      }
+    });
 
-export function setHighlightRadius(radius: number): void {
-    createOverlay();
-    rectSpotlight.setAttribute("rx", radius.toString());
-    rectBorder.setAttribute("rx", radius.toString());
-}
+    parent.appendChild(svg);
 
-export function hilight(position: DOMRect): void {
-    createOverlay();
-    const padding = 5;
-    const x = position.x - padding;
-    const y = position.y - padding;
-    const width = position.width + (padding * 2);
-    const height = position.height + (padding * 2);
+    this.container = parent;
+    this.svg = svg;
+    this.maskRectCutout = cutout;
+    this.borderRect = border;
+    this.backdropRect = backdrop;
+  }
 
-    rectSpotlight.setAttribute('x', x.toString());
-    rectSpotlight.setAttribute('y', y.toString());
-    rectSpotlight.setAttribute('width', width.toString());
-    rectSpotlight.setAttribute('height', height.toString());
+  show(): void {
+    if (!this.svg) return;
+    this.isVisible = true;
+    this.svg.classList.add('sl-visible');
+  }
 
-    rectBorder.setAttribute('x', x.toString());
-    rectBorder.setAttribute('y', y.toString());
-    rectBorder.setAttribute('width', width.toString());
-    rectBorder.setAttribute('height', height.toString());
+  hide(): void {
+    if (!this.svg) return;
+    this.isVisible = false;
+    this.svg.classList.remove('sl-visible');
+  }
 
-    svg.style.display = 'block';
+  moveTo(rect: DOMRect, padding: number = 8, radius: number = 8, isFirst: boolean = false): void {
+    if (!this.maskRectCutout || !this.borderRect || !this.svg) return;
+
+    const x = Math.max(0, rect.left - padding);
+    const y = Math.max(0, rect.top - padding);
+    const width = rect.width + padding * 2;
+    const height = rect.height + padding * 2;
+
+    if (isFirst) {
+      // Temporarily disable transition for the initial placement to prevent flying from (0,0)
+      this.maskRectCutout.style.transition = 'none';
+      this.borderRect.style.transition = 'none';
+    }
+
+    this.maskRectCutout.setAttribute('x', x.toString());
+    this.maskRectCutout.setAttribute('y', y.toString());
+    this.maskRectCutout.setAttribute('width', width.toString());
+    this.maskRectCutout.setAttribute('height', height.toString());
+    this.maskRectCutout.setAttribute('rx', radius.toString());
+
+    this.borderRect.setAttribute('x', x.toString());
+    this.borderRect.setAttribute('y', y.toString());
+    this.borderRect.setAttribute('width', width.toString());
+    this.borderRect.setAttribute('height', height.toString());
+    this.borderRect.setAttribute('rx', radius.toString());
+
+    if (isFirst) {
+      // Force layout reflow and restore transition
+      void this.maskRectCutout.getBoundingClientRect();
+      this.maskRectCutout.style.transition = '';
+      this.borderRect.style.transition = '';
+    }
+
+    if (!this.isVisible) {
+      this.show();
+    }
+  }
+
+  setHighlightColor(color: string): void {
+    if (this.borderRect) {
+      this.borderRect.style.stroke = color;
+    }
+  }
+
+  setHighlightStrokeWidth(width: number): void {
+    if (this.borderRect) {
+      this.borderRect.style.strokeWidth = `${width}px`;
+    }
+  }
+
+  setBorderRadius(radius: number): void {
+    if (this.maskRectCutout && this.borderRect) {
+      this.maskRectCutout.setAttribute('rx', radius.toString());
+      this.borderRect.setAttribute('rx', radius.toString());
+    }
+  }
+
+  destroy(): void {
+    if (this.svg && this.svg.parentNode) {
+      this.svg.parentNode.removeChild(this.svg);
+    }
+    this.svg = null;
+    this.maskRectCutout = null;
+    this.borderRect = null;
+    this.backdropRect = null;
+    this.container = null;
+  }
 }
