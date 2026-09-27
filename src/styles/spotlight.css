@@ -82,6 +82,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sl-spotlight-root:not(.sl-active) {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 /* ==========================================================================
    Overlay & SVG Cutout
    ========================================================================== */
@@ -94,17 +99,23 @@
   height: 100%;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--sl-transition-duration) ease;
+  visibility: hidden;
+  transition: opacity var(--sl-transition-duration) ease, visibility var(--sl-transition-duration) ease;
 }
 
 .sl-overlay-svg.sl-visible {
   opacity: var(--sl-overlay-opacity, 1);
+  visibility: visible;
 }
 
 .sl-backdrop-rect {
   fill: var(--sl-overlay-color);
-  pointer-events: auto;
+  pointer-events: none;
   cursor: pointer;
+}
+
+.sl-overlay-svg.sl-visible .sl-backdrop-rect {
+  pointer-events: auto;
 }
 
 .sl-cutout-rect {

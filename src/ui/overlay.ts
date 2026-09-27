@@ -80,6 +80,7 @@ export class OverlayManager {
       }
     });
 
+    svg.style.display = 'none';
     parent.appendChild(svg);
 
     this.container = parent;
@@ -92,13 +93,28 @@ export class OverlayManager {
   show(): void {
     if (!this.svg) return;
     this.isVisible = true;
-    this.svg.classList.add('sl-visible');
+    this.svg.style.display = 'block';
+    if (this.backdropRect) {
+      this.backdropRect.style.pointerEvents = 'auto';
+    }
+    requestAnimationFrame(() => {
+      this.svg?.classList.add('sl-visible');
+    });
   }
 
   hide(): void {
     if (!this.svg) return;
     this.isVisible = false;
     this.svg.classList.remove('sl-visible');
+    if (this.backdropRect) {
+      this.backdropRect.style.pointerEvents = 'none';
+    }
+    this.svg.style.pointerEvents = 'none';
+    setTimeout(() => {
+      if (!this.isVisible && this.svg) {
+        this.svg.style.display = 'none';
+      }
+    }, 320);
   }
 
   moveTo(rect: DOMRect, padding: number = 8, radius: number = 8, isFirst: boolean = false): void {

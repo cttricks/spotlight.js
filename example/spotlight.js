@@ -378,6 +378,7 @@ var OverlayManager = class {
         this.onBackdropClick();
       }
     });
+    svg.style.display = "none";
     parent.appendChild(svg);
     this.container = parent;
     this.svg = svg;
@@ -388,12 +389,27 @@ var OverlayManager = class {
   show() {
     if (!this.svg) return;
     this.isVisible = true;
-    this.svg.classList.add("sl-visible");
+    this.svg.style.display = "block";
+    if (this.backdropRect) {
+      this.backdropRect.style.pointerEvents = "auto";
+    }
+    requestAnimationFrame(() => {
+      this.svg?.classList.add("sl-visible");
+    });
   }
   hide() {
     if (!this.svg) return;
     this.isVisible = false;
     this.svg.classList.remove("sl-visible");
+    if (this.backdropRect) {
+      this.backdropRect.style.pointerEvents = "none";
+    }
+    this.svg.style.pointerEvents = "none";
+    setTimeout(() => {
+      if (!this.isVisible && this.svg) {
+        this.svg.style.display = "none";
+      }
+    }, 320);
   }
   moveTo(rect, padding = 8, radius = 8, isFirst = false) {
     if (!this.maskRectCutout || !this.borderRect || !this.svg) return;
@@ -629,6 +645,7 @@ var PopoverManager = class {
       e.stopPropagation();
       this.callbacks?.onNext();
     });
+    popover.style.display = "none";
     this.el = popover;
     this.arrowEl = arrow;
     this.headerEl = header;
@@ -643,7 +660,11 @@ var PopoverManager = class {
   }
   show() {
     if (!this.el) return;
-    this.el.classList.add("sl-visible");
+    this.el.style.display = "flex";
+    this.el.style.pointerEvents = "auto";
+    requestAnimationFrame(() => {
+      this.el?.classList.add("sl-visible");
+    });
     setTimeout(() => {
       this.nextBtn?.focus();
     }, 50);
@@ -651,6 +672,12 @@ var PopoverManager = class {
   hide() {
     if (!this.el) return;
     this.el.classList.remove("sl-visible");
+    this.el.style.pointerEvents = "none";
+    setTimeout(() => {
+      if (this.el && !this.el.classList.contains("sl-visible")) {
+        this.el.style.display = "none";
+      }
+    }, 240);
   }
   renderStep(step, index, total) {
     if (!this.el || !this.titleEl || !this.summaryEl || !this.progressEl || !this.nextBtn || !this.prevBtn) {
@@ -934,6 +961,7 @@ var Spotlight = class {
       this.currentIndex = 0;
     }
     this.isActive = true;
+    this.rootEl?.classList.add("sl-active");
     const step = this.steps[this.currentIndex];
     this.renderCurrentStep(true);
     this.events.emit("start", { step, total: this.steps.length });
@@ -1039,6 +1067,7 @@ var Spotlight = class {
     const currentStep = this.getCurrentStep();
     const index = this.currentIndex;
     this.isActive = false;
+    this.rootEl?.classList.remove("sl-active");
     this.overlayManager.hide();
     this.popoverManager.hide();
     this.resizeObserver?.disconnect();

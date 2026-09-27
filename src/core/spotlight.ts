@@ -199,6 +199,7 @@ export class Spotlight implements SpotlightControls {
     }
 
     this.isActive = true;
+    this.rootEl?.classList.add('sl-active');
     const step = this.steps[this.currentIndex];
 
     this.renderCurrentStep(true);
@@ -330,6 +331,7 @@ export class Spotlight implements SpotlightControls {
     const index = this.currentIndex;
 
     this.isActive = false;
+    this.rootEl?.classList.remove('sl-active');
     this.overlayManager.hide();
     this.popoverManager.hide();
 

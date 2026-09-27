@@ -132,6 +132,7 @@ export class PopoverManager {
       this.callbacks?.onNext();
     });
 
+    popover.style.display = 'none';
     this.el = popover;
     this.arrowEl = arrow;
     this.headerEl = header;
@@ -147,7 +148,11 @@ export class PopoverManager {
 
   show(): void {
     if (!this.el) return;
-    this.el.classList.add('sl-visible');
+    this.el.style.display = 'flex';
+    this.el.style.pointerEvents = 'auto';
+    requestAnimationFrame(() => {
+      this.el?.classList.add('sl-visible');
+    });
     // Set focus to the next button for keyboard accessibility
     setTimeout(() => {
       this.nextBtn?.focus();
@@ -157,6 +162,12 @@ export class PopoverManager {
   hide(): void {
     if (!this.el) return;
     this.el.classList.remove('sl-visible');
+    this.el.style.pointerEvents = 'none';
+    setTimeout(() => {
+      if (this.el && !this.el.classList.contains('sl-visible')) {
+        this.el.style.display = 'none';
+      }
+    }, 240);
   }
 
   renderStep(step: SpotStep, index: number, total: number): void {
